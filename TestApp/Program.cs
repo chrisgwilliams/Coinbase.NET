@@ -35,8 +35,8 @@ namespace TestApp
 			Console.WriteLine("OAuth Applications List: ");
 			Console.WriteLine(cbc.GetOAuthApplicationsList());
 			Console.WriteLine("");
-			Console.WriteLine("Account Authorization Info: ");
-			Console.WriteLine(cbc.GetAccountAuthorizationInfo());
+			Console.WriteLine("Application Account Access Info: ");
+			Console.WriteLine(cbc.GetApplicationAccountAccessInfo());
 			Console.WriteLine("");
 
 			Console.ReadLine();

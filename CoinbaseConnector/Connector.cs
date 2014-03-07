@@ -64,22 +64,96 @@ namespace CoinbaseConnector
 		{
 			return JsonRequest(URL_BASE + "oauth/applications/" + ID, GET);
 		}
-		public string CreateOAuthApplication()
+		public string CreateOAuthApplication(String name, String redirectURI)
 		{
-			return JsonRequest(URL_BASE + "oauth/applications/", POST);
+			return JsonRequest(URL_BASE + "oauth/applications?application[name]=" + name + "&application[redirect_uri]=" + redirectURI, POST);
 		}
 
 		// Authorization
-		public string GetAccountAuthorizationInfo()
+		public string GetApplicationAccountAccessInfo()
 		{
 			return JsonRequest(URL_BASE + "authorization", GET);
 		}
 
 		// Buttons
-		public string CreatePaymentButton()
+		public string CreatePaymentButton(String name, Decimal price, String currency, String type = "buy_now", 
+										  String repeat = "never", String style = "buy_now_large", String text = "Pay With Bitcoin",
+										  String description = "", String custom = "", Boolean custom_secure = false,
+										  String callback_url = "", String success_url = "", String cancel_url = "", 
+										  String info_url = "", Boolean auto_redirect = true, Boolean variable_price = false,
+										  Boolean choose_price = false, Boolean include_address = true, Boolean include_email = true,
+										  String price1 = "", String price2 = "", String price3 = "", String price4 = "", 
+										  String price5 = "")
 		{
-			string jsonParams=""; // TODO
-			return JsonRequest(URL_BASE + "buttons", POST, jsonParams);
+			var sb = new StringBuilder();
+
+			// REQUIRED PARAMS
+			sb.Append("?button[name]=" + name);
+			// Can be more then two significant digits if price_currency_iso equals BTC
+			if (currency != "BTC") string.Format("{0:0.00}", price);
+			sb.Append("&button[price_string]=" + price.ToString());
+			// Price currency as ISO 4217 Currency Code (i.e. USD, BTC)
+			sb.Append("&button[price_currency_iso]=" + currency);
+
+			// OPTIONAL PARAMS
+			// Type must be one of buy_now, donation, or subscription. Default is buy_now
+			sb.Append("&button[type]=" + type);
+			// Style must be one of buy_now_large, buy_now_small, donation_large, donation_small, 
+			// subscription_large, subscription_small, custom_large, custom_small, and none. Default is buy_now_large
+			sb.Append("&button[style]=" + style);
+			// Text may be used on custom_large or custom_small styles (above.) Default is "Pay With Bitcoin."
+			sb.Append("&button[text]=" + text);
+			// Description may be used to add more infomation to transaction notes
+			sb.Append("&button[description]=" + description);
+			// Custom usually represents an Order, User or Product ID corresponding to a record in your database.
+			sb.Append("&button[custom]=" + custom);
+			// Custom Secure should be set to TRUE to prevent the custom parameter from being viewed or modified after 
+			// the button has been created. Use this if you are storing sensitive data in the custom parameter which you 
+			// don’t want to be faked or leaked to the end user. Defaults to FALSE.
+			sb.Append("&button[custom_secure]=" + custom_secure);
+			// A custom callback URL specific to this button. It will receive the same information that would otherwise 
+			// be sent to your Instant Payment Notification URL. If you have an Instant Payment Notification URL set on 
+			// your account, this will be called instead — they will not both be called.
+			sb.Append("&button[callback_url]=" + callback_url);
+			// A custom success URL specific to this button. The user will be redirected to this URL after a successful 
+			// payment. It will receive the same parameters that would otherwise be sent to the default success url set
+			// on the account.
+			sb.Append("&button[success_url]=" + success_url);
+			// A custom cancel URL specific to this button. The user will be redirected to this URL after a canceled 
+			// order. It will receive the same parameters that would otherwise be sent to the default cancel url set 
+			// on the account.
+			sb.Append("&button[cancel_url]=" + cancel_url);
+			// A custom info URL specific to this button. Displayed to the user after a successful purchase for sharing.
+			// It will receive the same parameters that would otherwise be sent to the default info url set on the account.
+			sb.Append("&button[info_url]=" + info_url);
+			// Auto-redirect users to success or cancel url after payment. (Cancel url if the user pays the wrong amount.)
+			// Default is TRUE
+			sb.Append("&button[auto_redirect]=" + auto_redirect);
+			// Allow users to change the price on the generated button. Default is FALSE
+			sb.Append("&button[variable_price]=" + variable_price);
+			// Show some suggested prices. Default is FALSE
+			sb.Append("&button[choose_price]=" + choose_price);
+			// Collect shipping address from customer (not for use with inline iframes). Default is TRUE
+			sb.Append("&button[include_address]=" + include_address);
+			// Collect email address from customer (not for use with inline iframes). Default is TRUE
+			sb.Append("&button[include_email]=" + include_email);
+			// Suggested price 1
+			sb.Append("&button[price1]=" + price1);
+			// Suggested price 2
+			sb.Append("&button[price2]=" + price2);
+			// Suggested price 3
+			sb.Append("&button[price3]=" + price3);
+			// Suggested price 4
+			sb.Append("&button[price4]=" + price4);
+			// Suggested price 5
+			sb.Append("&button[price5]=" + price5);
+
+			// CONDITIONAL PARAMS
+			// Repeat must be one of never, daily, weekly, every_two_weeks, monthly, quarterly, or yearly. 
+			// Required if type = subscription. Default value is never.
+			sb.Append("&button[repeat]=" + repeat);
+
+			return JsonRequest(URL_BASE + "buttons" + sb.ToString(), POST);
 		}
 		public string CreateOrderForButton()
 		{
