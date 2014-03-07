@@ -6,3 +6,6 @@ c:\code\CryptoCurrencies\CoinbaseConnector\TestApp\bin\Debug\CoinbaseConnector.p
 c:\code\CryptoCurrencies\CoinbaseConnector\TestApp\obj\Debug\TestApp.csprojResolveAssemblyReference.cache
 c:\code\CryptoCurrencies\CoinbaseConnector\TestApp\obj\Debug\TestApp.exe
 c:\code\CryptoCurrencies\CoinbaseConnector\TestApp\obj\Debug\TestApp.pdb
+C:\CODE\CryptoCurrencies\Coinbase.NET\TestApp\bin\Debug\TestApp.exe.config
+C:\CODE\CryptoCurrencies\Coinbase.NET\TestApp\obj\Debug\TestApp.exe
+C:\CODE\CryptoCurrencies\Coinbase.NET\TestApp\obj\Debug\TestApp.pdb
