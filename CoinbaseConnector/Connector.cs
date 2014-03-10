@@ -155,22 +155,24 @@ namespace CoinbaseConnector
 
 			return JsonRequest(URL_BASE + "buttons" + sb.ToString(), POST);
 		}
-		public string CreateOrderForButton()
+		public string CreateOrderForButton(String code)
 		{
-			string jsonParams=""; // TODO
-			return JsonRequest(URL_BASE + "buttons/:code/create_order", POST, jsonParams);
+			return JsonRequest(URL_BASE + "buttons/" + code + "/create_order", POST);
 		}
 
 		// Buys
-		public string PurchaseBitcoin()
+		// The agree_btc_amount_varies parameter is optional and indicates whether or not the buyer would still like
+		// to buy if they have to wait for their money to arrive to lock in a price. Default value is FALSE
+		public string PurchaseBitcoin(float qty, Boolean agree_btc_amount_varies = false, String payment_method_id = "")
 		{
-			string jsonParams=""; // TODO
-			return JsonRequest(URL_BASE + "buys", POST, jsonParams);
+			return JsonRequest(URL_BASE + "buys?qty=" + qty + "&agree_btc_amount_varies=" + agree_btc_amount_varies 
+				+ "&payment_method_id=" + payment_method_id, POST);
 		}
 
 		// Contacts
-		public string GetEmailContacts()
+		public string GetEmailContactsList(int page = 1, int limit = 25, String query = "")
 		{
+			if (limit > 1000) limit = 1000;
 			return JsonRequest(URL_BASE + "contacts", GET);
 		}
 
