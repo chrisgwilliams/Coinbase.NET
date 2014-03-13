@@ -14,7 +14,14 @@ using System.Web.Script.Serialization;
 
 namespace CoinbaseConnector
 {
-    public class Connector
+	// For full documentation on all Coinbase API calls, please visit https://coinbase.com/api/doc
+
+	// Disclaimer: I do not work for Coinbase.com, but I will attempt to answer any  
+	// questions you may have about THIS wrapper (not about Coinbase) if you post them 
+	// to my GitHub repo: http://www.github.com/chrisgwilliams/coinbase.NET or message 
+	// me via Twitter: @chrisgwilliams 
+	
+	public class Connector
     {
 		private string API_KEY = APIKeys.API_KEY;
 		private string API_SECRET = APIKeys.API_SECRET;
@@ -285,13 +292,17 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "payment_methods", GET);
 		}
 
-		// Prices
+		// Prices 
 		public string GetTotalBuyPriceForBitcoin(float qty = 1, String currency = "USD")
 		{
+			// qty is optional. Default value is 1
+			// currency is optional. Default value is USD (this is the only supported value at this time.)
 			return JsonRequest(URL_BASE + "prices/buy?qty=" + qty + "&currency=" + currency, GET);
 		}
 		public string GetTotalSellPriceForBitcoin(float qty = 1, String currency = "USD")
 		{
+			// qty is optional. Default value is 1.
+			// currency is optional. Default value is USD (this is the only supported value at this time.)
 			return JsonRequest(URL_BASE + "prices/sell?qty=" + qty + "&currency=" + currency, GET);
 		}
 		public string GetSpotPriceForBitcoin(String currency = "USD")
@@ -306,10 +317,13 @@ namespace CoinbaseConnector
 		}
 
 		// Recurring Payments
-		public string GetRecurringPayments(String ID = "")
+		public string GetRecurringPaymentsList(String ID = "", String page = "1", String limit = "25")
 		{
 			// ID field is optional. Default is no parameter. 
-			return JsonRequest(URL_BASE + "recurring_payments/" + ID, GET);
+			// If you specify an ID, you get an individual recurring payment, otherwise you get a list
+			if (ID != "") return JsonRequest(URL_BASE + "recurring_payments/" + ID, GET);
+
+			return JsonRequest(URL_BASE + "recurring_payments?page=" + page + "&limit=" + limit, GET);
 		}
 
 		// Sells
@@ -320,52 +334,41 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "sells?qty=" + qty + "&payment_method_id=" + payment_method_id, POST);	
 		}
 
-
-
-#region Supporting Classes for API Parameters
-
-		public class Order
+		// Subscribers
+		public string GetSubscribersList(String ID = "", String page = "1", String limit = "25")
 		{
-			public Button button {get; set;}
-		}
+			// ID field is optional. Default is no parameter. 
+			// If you specify an ID, you get an individual customer subscription, otherwise you get a list
+			if (ID != "") return JsonRequest(URL_BASE + "subscribers/" + ID, GET);
 
-		public class Button
+			return JsonRequest(URL_BASE + "subscribers?page=" + page + "&limit=" + limit, GET);
+		}
+		
+		// Tokens
+		public string CreateToken()
 		{
-			public string name { get; set; }
-			public string price_string { get; set; }
-			public string price_currency_iso { get; set; }
-			public string type { get; set; }
-			public string repeat { get; set; }
-			public string style { get; set; }
-			public string text { get; set; }
-			public string description { get; set; }
-			public string custom { get; set; }
-			public bool custom_secure { get; set; }
-			public string callback_url { get; set; }
-			public string success_url { get; set; }
-			public string cancel_url { get; set; }
-			public string info_url { get; set; }
-			public bool auto_redirect { get; set; }
-			public bool variable_price { get; set; }
-			public bool choose_price { get; set; }
-			public bool include_address { get; set; }
-			public bool include_email { get; set; }
-			public string price1 { get; set; }
-			public string price2 { get; set; }
-			public string price3 { get; set; }
-			public string price4 { get; set; }
-			public string price5 { get; set; }
+			// This call creates a token redeemable for Bitcoin. Returned Bitcoin address can be used to send money 
+			// to the token, and will be credited to the account of the token redeemer if money is sent.
+			return JsonRequest(URL_BASE + "tokens", POST);
 		}
+		public string RedeemToken(String tokenID = "")
+		{
+			// This call claims a redeemable token for its address and bitcoin(s).
+			return JsonRequest(URL_BASE + "tokens/redeem?token_id=" + tokenID, POST);
+		}
+		// Transactions
 
-#endregion
+		// Transfers
+
+		// Users
 
 
-		private string JsonRequest(string url, string method, String postdata = "")
+
+
+
+		private string JsonRequest(string url, string method)
 		{
 			string returnData = String.Empty;
-
-			// strip out any escape characters in the optional parameters
-			postdata = postdata.Replace(@"\", "");
 
 			var webRequest = HttpWebRequest.Create(url) as HttpWebRequest;
 			if (webRequest != null)
@@ -377,7 +380,7 @@ namespace CoinbaseConnector
 				webRequest.Host = "coinbase.com";
 
 				string nonce = Convert.ToInt64(DateTime.Now.Ticks).ToString();
-				string message = nonce + url + postdata;
+				string message = nonce + url;
 				string signature = HashEncode(HashHMAC(StringEncode(API_SECRET), StringEncode(message)));
 
 				var whc = new WebHeaderCollection();
@@ -385,18 +388,6 @@ namespace CoinbaseConnector
 				whc.Add("ACCESS_SIGNATURE: " + signature);
 				whc.Add("ACCESS_NONCE: " + nonce);
 				webRequest.Headers = whc;
-
-				if (postdata != "")
-				{
-					ASCIIEncoding encoding = new ASCIIEncoding();
-					byte[] byte1 = encoding.GetBytes(postdata);
-
-					// Set the content length of the string being posted.
-					webRequest.ContentLength = byte1.Length;
-					Stream newStream = webRequest.GetRequestStream();
-
-					newStream.Write(byte1, 0, byte1.Length);
-				}
 
 				using (WebResponse response = webRequest.GetResponse())
 				{
