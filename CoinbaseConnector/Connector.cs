@@ -33,7 +33,7 @@ namespace CoinbaseConnector
 		private const String DELETE = "DELETE";
 		
 		// Account Changes
-		public string GetAccountChanges(String page = "1")
+		public string GetAccountChanges(int page = 1)
 		{
 			// Page field is optional. Default is 1
 			return JsonRequest(URL_BASE + "account_changes?page=" + page, GET);
@@ -58,14 +58,14 @@ namespace CoinbaseConnector
 		}
 
 		// Addresses
-		public string GetAddressList(String page = "1", String limit = "25", String query = "")
+		public string GetAddressList(int page = 1, int limit = 25, String query = "")
 		{
 			// Page field is optional. Default is 1
 			return JsonRequest(URL_BASE + "addresses?page=" + page + "&limit=" + limit + "&query=" + query, GET);
 		}
 
 		// OAuth Applications
-		public string GetOAuthApplicationsList(String page = "1")
+		public string GetOAuthApplicationsList(int page = 1)
 		{
 			return JsonRequest(URL_BASE + "oauth/applications?page=" + page, GET);
 		}
@@ -196,7 +196,7 @@ namespace CoinbaseConnector
 		}
 
 		// Orders
-		public string GetReceivedMerchantOrdersList(string page = "1")
+		public string GetReceivedMerchantOrdersList(int page = 1)
 		{
 			// Page field is optional. Default is 1
 			return JsonRequest(URL_BASE + "orders?page=" + page, GET);
@@ -312,14 +312,14 @@ namespace CoinbaseConnector
 			// Currency must be an ISO 4217 Currency Code. Default is USD
 			return JsonRequest(URL_BASE + "prices/spot_rate?currency=" + currency, GET);
 		}
-		public string GetHistoricalSpotPriceForBitcoin(String page = "1")
+		public string GetHistoricalSpotPriceForBitcoin(int page = 1)
 		{
 			// Page field is optional. Default is 1
 			return JsonRequest(URL_BASE + "prices/historical?page=" + page, GET);
 		}
 
 		// Recurring Payments
-		public string GetRecurringPaymentsList(String ID = "", String page = "1", String limit = "25")
+		public string GetRecurringPaymentsList(String ID = "", int page = 1, int limit = 25)
 		{
 			// ID field is optional. Default is no parameter. 
 			// If you specify an ID, you get an individual recurring payment, otherwise you get a list
@@ -337,7 +337,7 @@ namespace CoinbaseConnector
 		}
 
 		// Subscribers
-		public string GetSubscribersList(String ID = "", String page = "1", String limit = "25")
+		public string GetSubscribersList(String ID = "", int page = 1, int limit = 25)
 		{
 			// ID field is optional. Default is no parameter. 
 			// If you specify an ID, you get an individual customer subscription, otherwise you get a list
@@ -360,7 +360,7 @@ namespace CoinbaseConnector
 		}
 
 		// Transactions
-		public string GetTransactionsList(String ID = "", String page = "1", String limit = "25") 
+		public string GetTransactionsList(String ID = "", int page = 1, int limit = 25) 
 		{
 			// ID field is optional. Default is no parameter. 
 			// If you specify an ID, you get an individual transaction, otherwise you get a list
@@ -451,7 +451,15 @@ namespace CoinbaseConnector
 		}
 
 		// Transfers
-
+		public string GetTransfersList(int page = 1, int limit = 25)
+		{
+			// This returns the user's bitcoin purchases and sells. Sorted by created_at, descending.
+			// page param is optional, default value is 1.
+			// limit param is optional, default value is 25, max value is 1000.
+			if (limit > 1000) limit = 1000;
+			return JsonRequest(URL_BASE + "transfers?page=" + page + "&limit=" + limit, GET);
+		}
+		
 		// Users
 
 
