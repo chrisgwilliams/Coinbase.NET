@@ -368,7 +368,7 @@ namespace CoinbaseConnector
 
 			return JsonRequest(URL_BASE + "transactions?page=" + page + "&limit=" + limit, GET);
 		}
-		public string SendMoney(String to, String amount = "", String amountString = "", String amountCurrencyISO = "", 
+		public string SendMoney(String email, String amount = "", String amountString = "", String amountCurrencyISO = "", 
 								String notes = "", String userFee = "", String referrerID = "", String idem = "", 
 								Boolean instantBuy = false)
 		{
@@ -381,10 +381,15 @@ namespace CoinbaseConnector
 			// equal to the remainder of your daily limit. If the instant buy is successful, the response will come 
 			// back with an additional transfer field representing the purchase.
 
+			// If you provide a new email address in the "to" field, this will create the user and send them a payment,
+			// asking them to sign in and claim the amount (they will choose a password on this first step). If they
+			// don’t claim the amount within 30 days the bitcoin will be automatically returned to you.
+
 			var sb = new StringBuilder();
 
 			// REQUIRED PARAMS
-			sb.Append("?transaction[to]=" + to);
+			// This must be an email address.
+			sb.Append("?transaction[to]=" + email); 
 
 			// CONDITIONAL PARAMS
 			// If you supply values for amount, amount_string AND amount_currency_iso, then amount takes precedence.
@@ -461,8 +466,49 @@ namespace CoinbaseConnector
 		}
 		
 		// Users
+		public string CreateNewUser(String email, String password, String referrerID = "", String clientID = "")
+		{
+			// This method creates a user with an email and password. The receive address for the user is returned 
+			// as well if you’d like to send a first payment to them. To generate additional receive addresses you 
+			// will need to be authenticated as this user.
 
+			// This method is useful if you would only like to create the user, or would like to send to their 
+			// bitcoin address instead of an email address.
 
+			var sb = new StringBuilder();
+
+			// REQUIRED PARAMS
+			sb.Append("?user[email]=" + email);
+			// A strong password - at least eight digits without dictionary words.
+			sb.Append("&user[password]=" + password);
+
+			// OPTIONAL PARAMS
+			if (referrerID != "") sb.Append("&user[referrer_id]=" + referrerID);
+			if (clientID != "") sb.Append("&user[client_id]=" + clientID);
+
+			return JsonRequest(URL_BASE + "users" + sb.ToString(), POST);
+
+		}
+		public string GetAccountSettings()
+		{
+			// Show current user with account settings.
+			return JsonRequest(URL_BASE + "users", GET);
+		}
+		public string UpdateAccountSettings(String id, String name = "", String email = "", String pin = "", 
+											String nativeCurrency = "", String timeZone = "")
+		{
+			// This lets you update account settings for the current user. Only these fields are updatable.
+			var sb = new StringBuilder();
+
+			sb.Append("&id=" + id);
+			if (name != "") sb.Append("&user[name]=" + name);
+			if (email != "") sb.Append("&user[email]=" + email);
+			if (pin != "") sb.Append("&user[pin]=" + pin);
+			if (nativeCurrency != "") sb.Append("&user[native_currency]=" + nativeCurrency);
+			if (timeZone != "") sb.Append("&user[time_zone]=" + timeZone);
+
+			return JsonRequest(URL_BASE + "users/" + id + sb.ToString(), PUT);
+		}
 
 
 
