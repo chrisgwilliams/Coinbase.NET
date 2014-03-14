@@ -27,8 +27,10 @@ namespace CoinbaseConnector
 		private string API_SECRET = APIKeys.API_SECRET;
 
 		private string URL_BASE = "https://coinbase.com/api/v1/";
-		private const string GET = "GET";
-		private const string POST = "POST";
+		private const String GET = "GET";
+		private const String POST = "POST";
+		private const String PUT = "PUT";
+		private const String DELETE = "DELETE";
 		
 		// Account Changes
 		public string GetAccountChanges(String page = "1")
@@ -356,7 +358,97 @@ namespace CoinbaseConnector
 			// This call claims a redeemable token for its address and bitcoin(s).
 			return JsonRequest(URL_BASE + "tokens/redeem?token_id=" + tokenID, POST);
 		}
+
 		// Transactions
+		public string GetTransactionsList(String ID = "", String page = "1", String limit = "25") 
+		{
+			// ID field is optional. Default is no parameter. 
+			// If you specify an ID, you get an individual transaction, otherwise you get a list
+			if (ID != "") return JsonRequest(URL_BASE + "transactions/" + ID, GET);
+
+			return JsonRequest(URL_BASE + "transactions?page=" + page + "&limit=" + limit, GET);
+		}
+		public string SendMoney(String to, String amount = "", String amountString = "", String amountCurrencyISO = "", 
+								String notes = "", String userFee = "", String referrerID = "", String idem = "", 
+								Boolean instantBuy = false)
+		{
+			// This lets you send money to an email or bitcoin address. If you pass an amount param it will be 
+			// interpreted as a bitcoin amount. Alternatively you can pass an amount_string and amount_currency_iso 
+			// such as ‘USD’ or ‘EUR’ and the equivalent amount of bitcoin will be sent at current exchange rates.
+
+			// The instant_buy parameter can be used to purchase the necessary funds first, then send them. This will 
+			// only work if Instant Buy is enabled on your account and the amount being purchased is less than or 
+			// equal to the remainder of your daily limit. If the instant buy is successful, the response will come 
+			// back with an additional transfer field representing the purchase.
+
+			var sb = new StringBuilder();
+
+			// REQUIRED PARAMS
+			sb.Append("?transaction[to]=" + to);
+
+			// CONDITIONAL PARAMS
+			// If you supply values for amount, amount_string AND amount_currency_iso, then amount takes precedence.
+			if (amount != "") 
+			{ 
+				sb.Append("&transaction[amount]=" + amount);
+			} else {
+				sb.Append("&transaction[amount_string]=" + amountString);
+				sb.Append("&transaction[amount_currency_iso]=" + amountCurrencyISO);
+			}
+			
+			// OPTIONAL PARAMS
+			if (notes != "") sb.Append("&transaction[notes]=" + notes);
+			if (userFee != "") sb.Append("&transaction[user_fee]=" + userFee);
+			if (referrerID != "") sb.Append("&transaction[referrer_id]=" + referrerID);
+			if (idem != "") sb.Append("&transaction[idem]=" + idem);
+			if (instantBuy != false) sb.Append("&transaction[instant_buy]=" + instantBuy.ToString());
+
+			return JsonRequest(URL_BASE + "transactions/send_money" + sb.ToString(), POST);
+		}
+		public string SendInvoice(String from, String amount = "", String amountString = "", String amountCurrencyISO = "",
+								  String notes = "")
+		{
+			// This lets the user request money from a bitcoin address. If you pass an amount param it will be 
+			// interpreted as a bitcoin amount. Alternatively you can pass an amount_string and amount_currency_iso 
+			// such as ‘USD’ or ‘EUR’ and the equivalent amount of bitcoin will be sent at current exchange rates.
+			var sb = new StringBuilder();
+
+			// REQUIRED PARAMS
+			sb.Append("?transaction[from]=" + from);
+			
+			// CONDITIONAL PARAMS
+			// If you supply values for amount, amount_string AND amount_currency_iso, then amount takes precedence.
+			if (amount != "")
+			{
+				sb.Append("&transaction[amount]=" + amount);
+			}
+			else
+			{
+				sb.Append("&transaction[amount_string]=" + amountString);
+				sb.Append("&transaction[amount_currency_iso]=" + amountCurrencyISO);
+			}
+
+			// OPTIONAL PARAMS
+			if (notes != "") sb.Append("&transaction[notes]=" + notes);
+
+			return JsonRequest(URL_BASE + "transactions/request_money" + sb.ToString(), POST);
+		}
+		public string ResendInvoice(String ID)
+		{
+			// This lets the user resend a money request.
+			return JsonRequest(URL_BASE + "transactions/" + ID + "/resend_request", PUT);
+		}
+		public string CancelMoneyRequest(String ID)
+		{
+			// This lets a user cancel a money request. Money requests can be canceled by the sender or the recipient.
+			return JsonRequest(URL_BASE + "transactions/" + ID + "/cancel_request", DELETE);
+		}
+		public string CompleteMoneyRequest(String ID)
+		{
+			// This lets a user complete a money request. Money requests can only be completed by the sender (not the 
+			// recipient.) The sender in this context is the user who is sending money (not sending the invoice.)
+			return JsonRequest(URL_BASE + "transactions/" + ID + "/complete_request", PUT);
+		}
 
 		// Transfers
 
