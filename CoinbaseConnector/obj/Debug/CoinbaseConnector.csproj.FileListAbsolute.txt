@@ -1,5 +1,0 @@
-c:\code\CryptoCurrencies\CoinbaseConnector\CoinbaseConnector\obj\Debug\CoinbaseConnector.csprojResolveAssemblyReference.cache
-c:\code\CryptoCurrencies\CoinbaseConnector\CoinbaseConnector\bin\Debug\CoinbaseConnector.dll
-c:\code\CryptoCurrencies\CoinbaseConnector\CoinbaseConnector\bin\Debug\CoinbaseConnector.pdb
-c:\code\CryptoCurrencies\CoinbaseConnector\CoinbaseConnector\obj\Debug\CoinbaseConnector.dll
-c:\code\CryptoCurrencies\CoinbaseConnector\CoinbaseConnector\obj\Debug\CoinbaseConnector.pdb
