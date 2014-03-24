@@ -510,8 +510,6 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "users/" + id + sb.ToString(), PUT);
 		}
 
-
-
 		private string JsonRequest(string url, string method)
 		{
 			string returnData = String.Empty;
@@ -565,4 +563,21 @@ namespace CoinbaseConnector
 			return hash.ComputeHash(message);
 		}
     }
+
+
+	public class CreateOAuthApp_Result
+	{
+		public Application[] applications { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
+	public class Application
+	{
+		public string id { get; set; }
+		public string created_at { get; set; }
+		public string name { get; set; }
+		public string num_users { get; set; }
+	}
 }
