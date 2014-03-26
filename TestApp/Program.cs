@@ -33,7 +33,7 @@ namespace TestApp
 			Console.WriteLine("");
 			
 			Console.WriteLine("Generate Receive Address with Callback and Label: ");
-			Console.WriteLine(cbc.GenerateReceiveAddress("http://www.example.com", "Sample"));
+			Console.WriteLine(cbc.GenerateReceiveAddress("http://www.example.com", "Sample Label"));
 			Console.WriteLine("");
 
 			Console.WriteLine("Current (New) Receive Address: ");
@@ -45,7 +45,7 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Create OAuth Application: ");
-			Console.WriteLine(cbc.CreateOAuthApplication("SampleApp414", "http://www.example.com"));
+			Console.WriteLine(cbc.CreateOAuthApplication("Sample App444", "http://www.example.com"));
 			Console.WriteLine("");
 			
 			Console.WriteLine("OAuth Applications List: ");

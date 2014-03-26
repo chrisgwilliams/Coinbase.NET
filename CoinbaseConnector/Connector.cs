@@ -170,10 +170,10 @@ namespace CoinbaseConnector
 		}
 
 		// Buys
-		// The agree_btc_amount_varies parameter is optional and indicates whether or not the buyer would still like
-		// to buy if they have to wait for their money to arrive to lock in a price. Default value is FALSE
 		public string PurchaseBitcoin(float qty, Boolean agree_btc_amount_varies = false, String payment_method_id = "")
 		{
+			// The agree_btc_amount_varies parameter is optional and indicates whether or not the buyer would still like
+			// to buy if they have to wait for their money to arrive to lock in a price. Default value is FALSE
 			return JsonRequest(URL_BASE + "buys?qty=" + qty + "&agree_btc_amount_varies=" + agree_btc_amount_varies 
 				+ "&payment_method_id=" + payment_method_id, POST);
 		}
@@ -512,6 +512,9 @@ namespace CoinbaseConnector
 
 		private string JsonRequest(string url, string method)
 		{
+			// take care of any spaces in params
+			url = Uri.EscapeUriString(url);
+
 			string returnData = String.Empty;
 
 			var webRequest = HttpWebRequest.Create(url) as HttpWebRequest;
@@ -564,20 +567,4 @@ namespace CoinbaseConnector
 		}
     }
 
-
-	public class CreateOAuthApp_Result
-	{
-		public Application[] applications { get; set; }
-		public string total_count { get; set; }
-		public string num_pages { get; set; }
-		public string current_page { get; set; }
-	}
-
-	public class Application
-	{
-		public string id { get; set; }
-		public string created_at { get; set; }
-		public string name { get; set; }
-		public string num_users { get; set; }
-	}
 }
