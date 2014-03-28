@@ -85,7 +85,7 @@ namespace CoinbaseConnector
 		}
 
 		// Buttons
-		public string CreatePaymentButton(String name, Decimal price, String currency, String type = "buy_now", 
+		public string CreatePaymentButton(String name, String price, String currency, String type = "buy_now", 
 										  String repeat = "never", String style = "buy_now_large", String text = "Pay With Bitcoin",
 										  String description = "", String custom = "", Boolean custom_secure = false,
 										  String callback_url = "", String success_url = "", String cancel_url = "", 
@@ -100,7 +100,7 @@ namespace CoinbaseConnector
 			sb.Append("?button[name]=" + name);
 			// Can be more then two significant digits if price_currency_iso equals BTC
 			if (currency != "BTC") string.Format("{0:0.00}", price);
-			sb.Append("&button[price_string]=" + price.ToString());
+			sb.Append("&button[price_string]=" + price);
 			// Price currency as ISO 4217 Currency Code (i.e. USD, BTC)
 			sb.Append("&button[price_currency_iso]=" + currency);
 
@@ -195,6 +195,28 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "exchange_rates", GET);
 		}
 
+		// Exports
+		public string GenerateCSVReport(String type, String timeRange, String timeRangeStart="", String timeRangeEnd = "", String email = "")
+		{
+			// Valid values for type: transactions, orders, transfers
+			// Valid values for time_range: today, yesterday, past_7, past_30, month_to_date, last_full_month, year_to_date, 
+			// last_full_year, all, custom.  If custom, must supply time_range_start and time_range_end.
+			// If an email address is not provided, address on account will be used.
+			var sb = new StringBuilder();
+
+			// REQUIRED PARAMS
+			sb.Append("?type=" + type);
+			sb.Append("&time_range=" + timeRange);
+
+			// OPTIONAL PARAMS
+			if (email != "") sb.Append("&email=" + email);
+
+			// CONDITIONAL PARAMS
+			if (type == "custom") sb.Append("&time_range_start=" + timeRangeStart + "&time_range_end" + timeRangeEnd);
+
+			return JsonRequest(URL_BASE + "exports" + sb.ToString(), POST);
+		}
+
 		// Orders
 		public string GetReceivedMerchantOrdersList(int page = 1)
 		{
@@ -203,7 +225,7 @@ namespace CoinbaseConnector
 		}
 		// Use this endpoint to create a one-time unique order that does not use the Coinbase merchant tools.
 		// Ex: Generating a bitcoin address for an order and displaying it directly in your page, to only one user.
-		public string CreateNewOrder(String name, Decimal price, String currency, String type = "buy_now",
+		public string CreateNewOrder(String name, String price, String currency, String type = "buy_now",
 									 String repeat = "never", String style = "buy_now_large", String text = "Pay With Bitcoin",
 									 String description = "", String custom = "", Boolean custom_secure = false,
 									 String callback_url = "", String success_url = "", String cancel_url = "",
@@ -510,6 +532,10 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "users/" + id + sb.ToString(), PUT);
 		}
 
+
+
+
+
 		private string JsonRequest(string url, string method)
 		{
 			// take care of any spaces in params
@@ -565,6 +591,7 @@ namespace CoinbaseConnector
 			var hash = new HMACSHA256(key);
 			return hash.ComputeHash(message);
 		}
-    }
+
+	}
 
 }
