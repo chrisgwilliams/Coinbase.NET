@@ -181,8 +181,19 @@ namespace CoinbaseConnector
 		// Contacts
 		public string GetEmailContactsList(int page = 1, int limit = 25, String query = "")
 		{
+
+			var sb = new StringBuilder();
+
+			sb.Append("?page=" + page);
+			
 			if (limit > 1000) limit = 1000;
-			return JsonRequest(URL_BASE + "contacts?page=" + page + "&limit=" + limit + "&query=" + query, GET);
+			sb.Append("&limit=" + limit);
+
+			if (query != "") sb.Append("&query=" + query);
+
+			// Temporary fix to API problem, not passing any parameters.
+			//return JsonRequest(URL_BASE + "contacts" + sb.ToString(), GET);
+			return JsonRequest(URL_BASE + "contacts", GET);
 		}
 
 		// Currencies
@@ -192,7 +203,7 @@ namespace CoinbaseConnector
 		}
 		public string GetBTCExchangeRate()
 		{
-			return JsonRequest(URL_BASE + "exchange_rates", GET);
+			return JsonRequest(URL_BASE + "currencies/exchange_rates", GET);
 		}
 
 		// Exports

@@ -119,51 +119,55 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Total Buy Price For BitCoin: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetTotalBuyPriceForBitcoin());
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Total Sell Price For BitCoin: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetTotalSellPriceForBitcoin());
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Spot Price For BitCoin: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetSpotPriceForBitcoin());
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Historical Spot Price For BitCoin: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetHistoricalSpotPriceForBitcoin());
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Recurring Payments List: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetRecurringPaymentsList());
 			Console.WriteLine("");
 
-			Console.WriteLine("Sell BitCoin: ");
+			Console.WriteLine("Get Recurring Payment By ID: ");
 			Console.WriteLine("");
+			Console.WriteLine("");
+	
+			Console.WriteLine("Sell BitCoin: ");
+			Console.WriteLine(cbc.SellBitcoin(1));
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Subscribers List: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetSubscribersList());
 			Console.WriteLine("");
 
 			Console.WriteLine("Create Token: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.CreateToken());
 			Console.WriteLine("");
 
 			Console.WriteLine("Redeem Token: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.RedeemToken());
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Transactions List: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetTransactionsList());
 			Console.WriteLine("");
 
 			Console.WriteLine("Send Money: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.SendMoney());
 			Console.WriteLine("");
 
 			Console.WriteLine("Send Invoice: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.SendInvoice("me@myemail.com"));
 			Console.WriteLine("");
 
 			Console.WriteLine("Resend Invoice: ");
