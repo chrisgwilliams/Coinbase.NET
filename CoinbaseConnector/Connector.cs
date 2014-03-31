@@ -187,13 +187,13 @@ namespace CoinbaseConnector
 			sb.Append("?page=" + page);
 			
 			if (limit > 1000) limit = 1000;
-			sb.Append("&limit=" + limit);
+			//sb.Append("&limit=" + limit);
 
 			if (query != "") sb.Append("&query=" + query);
 
 			// Temporary fix to API problem, not passing any parameters.
 			//return JsonRequest(URL_BASE + "contacts" + sb.ToString(), GET);
-			return JsonRequest(URL_BASE + "contacts", GET);
+			return JsonRequest(URL_BASE + "contacts" + sb.ToString(), GET);
 		}
 
 		// Currencies
@@ -358,7 +358,9 @@ namespace CoinbaseConnector
 			// If you specify an ID, you get an individual recurring payment, otherwise you get a list
 			if (ID != "") return JsonRequest(URL_BASE + "recurring_payments/" + ID, GET);
 
-			return JsonRequest(URL_BASE + "recurring_payments?page=" + page + "&limit=" + limit, GET);
+			// Commented out parameterized call due to API bug. Will recheck in next release (1.0.2).
+			//return JsonRequest(URL_BASE + "recurring_payments?page=" + page + "&limit=" + limit, GET);
+			return JsonRequest(URL_BASE + "recurring_payments", GET);
 		}
 
 		// Sells
@@ -376,7 +378,9 @@ namespace CoinbaseConnector
 			// If you specify an ID, you get an individual customer subscription, otherwise you get a list
 			if (ID != "") return JsonRequest(URL_BASE + "subscribers/" + ID, GET);
 
-			return JsonRequest(URL_BASE + "subscribers?page=" + page + "&limit=" + limit, GET);
+			// Commented out parameterized call due to API bug. Will recheck in next release (1.0.2).
+			//return JsonRequest(URL_BASE + "subscribers?page=" + page + "&limit=" + limit, GET);
+			return JsonRequest(URL_BASE + "subscribers", GET);
 		}
 		
 		// Tokens

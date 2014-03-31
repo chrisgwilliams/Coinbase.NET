@@ -7,6 +7,51 @@ using System.Threading.Tasks;
 namespace CoinbaseConnector
 {
 	
+	public class AccountSettings_Result
+	{
+		public User[] users { get; set; }
+	}
+
+	public class User
+	{
+		public string id { get; set; }
+		public string name { get; set; }
+		public string email { get; set; }
+		public string time_zone { get; set; }
+		public string native_currency { get; set; }
+		public Amount balance { get; set; }
+		public string buy_level { get; set; }
+		public string sell_level { get; set; }
+		public Amount buy_limit { get; set; }
+		public Amount sell_limit { get; set; }
+	}
+
+	public class CreateInvoice_Result
+	{
+		public string success { get; set; }
+		public Transaction transaction { get; set; }
+	}
+	
+	public class Transaction
+	{
+		public string id { get; set; }
+		public string created_at { get; set; }
+		public string hsh { get; set; }
+		public string notes { get; set; }
+		public Amount amount { get; set; }
+		public string request { get; set; }
+		public string status { get; set; }
+		public Party sender { get; set; }
+		public Party recipient { get; set; }
+	}
+
+	public class Party
+	{
+		public string id { get; set; }
+		public string name { get; set; }
+		public string email { get; set; }
+	}
+
 	public class CreateOAuthApp_Result
 	{
 		public Application[] applications { get; set; }
@@ -81,4 +126,36 @@ namespace CoinbaseConnector
 		public string id { get; set; }
 	}
 
+	public class RecurringPayments_Result
+	{
+		public RecurringPayment[] recurring_payments { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
+	public class RecurringPayment
+	{
+		public string id { get; set; }
+		public string type { get; set; }
+		public string status { get; set; }
+		public string created_at { get; set; }
+		public string to { get; set; }
+		public string from { get; set; }
+		public string start_type { get; set; }
+		public string times { get; set; }
+		public string times_run { get; set; }
+		public string repeat { get; set; }
+		public string last_run { get; set; }
+		public string next_run { get; set; }
+		public string notes { get; set; }
+		public string description { get; set; }
+		public Amount amount { get; set; }
+	}
+
+	public class Amount
+	{
+		public string amount { get; set; }
+		public string currency { get; set; }
+	}
 }

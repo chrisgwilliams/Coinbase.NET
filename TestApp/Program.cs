@@ -114,6 +114,8 @@ namespace TestApp
 			Console.WriteLine(cbc.GetMerchantOrderByID(ID));
 			Console.WriteLine("");
 
+			// Currently, this method WILL FAIL if the calling user has no payment methods defined in their account.
+			// A bug has been submitted to Coinbase engineers to return json instead of throwing an error.
 			Console.WriteLine("Get Associated Payment Methods: ");
 			Console.WriteLine(cbc.GetAssociatedPaymentMethods());
 			Console.WriteLine("");
@@ -135,15 +137,20 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Recurring Payments List: ");
-			Console.WriteLine(cbc.GetRecurringPaymentsList());
+			Response = cbc.GetRecurringPaymentsList();
+			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			Console.WriteLine("Get Recurring Payment By ID: ");
-			Console.WriteLine("");
+			RecurringPayments_Result recurringPaymentsResult = JsonConvert.DeserializeObject<RecurringPayments_Result>(Response);
+			foreach (RecurringPayment recurringPayment in recurringPaymentsResult.recurring_payments)
+			{
+				Console.WriteLine("Get Recurring Payment By ID: " + recurringPayment.id);
+				Console.WriteLine(cbc.GetRecurringPaymentsList(recurringPayment.id));
+			}
 			Console.WriteLine("");
 	
 			Console.WriteLine("Sell BitCoin: ");
-			Console.WriteLine(cbc.SellBitcoin(1));
+			Console.WriteLine(cbc.SellBitcoin(0));
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Subscribers List: ");
@@ -163,39 +170,48 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Send Money: ");
-			Console.WriteLine(cbc.SendMoney());
+			Console.WriteLine(cbc.SendMoney("test@MyStatisticallyImprobableEmailAddress.com", "0"));
 			Console.WriteLine("");
 
 			Console.WriteLine("Send Invoice: ");
-			Console.WriteLine(cbc.SendInvoice("me@myemail.com"));
+			Response = cbc.SendInvoice("test@MyStatisticallyImprobableEmailAddress.com");
+			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			Console.WriteLine("Resend Invoice: ");
-			Console.WriteLine("");
+			CreateInvoice_Result createInvoiceResult = JsonConvert.DeserializeObject<CreateInvoice_Result>(Response);
+			var InvoiceID = createInvoiceResult.transaction.id;
+
+			Console.WriteLine("Resend Invoice: " + InvoiceID);
+			Console.WriteLine(cbc.ResendInvoice(InvoiceID));
 			Console.WriteLine("");
 
 			Console.WriteLine("Cancel Money Request: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.CancelMoneyRequest(InvoiceID));
 			Console.WriteLine("");
 
 			Console.WriteLine("Complete Money Request: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.CompleteMoneyRequest(InvoiceID));
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Transfers List: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.GetTransfersList());
 			Console.WriteLine("");
 
 			Console.WriteLine("Create New User: ");
-			Console.WriteLine("");
+			Console.WriteLine(cbc.CreateNewUser("newuseremail@email.com", "badpassword"));
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Account Settings: ");
-			Console.WriteLine("");
+			Response = cbc.GetAccountSettings();
+			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			Console.WriteLine("Update Account Settings: ");
-			Console.WriteLine("");
+			AccountSettings_Result accountSettingsResult = JsonConvert.DeserializeObject<AccountSettings_Result>(Response);
+			foreach (User user in accountSettingsResult.users)
+			{
+				Console.WriteLine("Update Account Settings for: " + user.id);
+				Console.WriteLine(cbc.UpdateAccountSettings(user.id, "My New Name"));
+			}
 			Console.WriteLine("");
 
 			Console.WriteLine("Tests Complete.");
