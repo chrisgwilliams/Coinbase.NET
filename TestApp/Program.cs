@@ -18,35 +18,81 @@ namespace TestApp
 			var Response = "";
 
 			Console.WriteLine("Account Changes: ");
-			Console.WriteLine(cbc.GetAccountChanges());
+			AccountChanges_Result changes = JsonConvert.DeserializeObject<AccountChanges_Result>(cbc.GetAccountChanges());
+			Console.WriteLine("Current User: ");
+			Console.WriteLine("id: " + changes.current_user.id);
+			Console.WriteLine("email: " + changes.current_user.email);
+			Console.WriteLine("name:  " + changes.current_user.name);
 			Console.WriteLine("");
 
 			Console.WriteLine("Account Balance: ");
-			Console.WriteLine(cbc.GetAccountBalance());
+			Amount amount = JsonConvert.DeserializeObject<Amount>(cbc.GetAccountBalance());
+			Console.WriteLine(amount.amount + " " + amount.currency);
 			Console.WriteLine("");
 			
 			Console.WriteLine("Generate Receive Address: ");
-			Console.WriteLine(cbc.GenerateReceiveAddress());
+			GenerateReceiveAddress_Result genReceiveAddress = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress());
+			Console.WriteLine("success: " + genReceiveAddress.success);
+			Console.WriteLine("address: " + genReceiveAddress.address);
+			Console.WriteLine("callback_url: " + genReceiveAddress.callback_url);
+			Console.WriteLine("label: " + genReceiveAddress.label);
 			Console.WriteLine("");
 
 			Console.WriteLine("Current Receive Address: ");
-			Console.WriteLine(cbc.GetCurrentReceiveAddress());
+			ReceiveAddress_Result receiveAddress = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
+			Console.WriteLine("success: " + receiveAddress.success);
+			Console.WriteLine("address: " + receiveAddress.address);
+			Console.WriteLine("callback_url: " + receiveAddress.callback_url);
 			Console.WriteLine("");
 			
 			Console.WriteLine("Generate Receive Address with Callback and Label: ");
-			Console.WriteLine(cbc.GenerateReceiveAddress("http://www.example.com", "Sample Label"));
+			GenerateReceiveAddress_Result genReceiveAddress = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress("http://www.example.com", "Sample Label"));
+			Console.WriteLine("success: " + genReceiveAddress.success);
+			Console.WriteLine("address: " + genReceiveAddress.address);
+			Console.WriteLine("callback_url: " + genReceiveAddress.callback_url);
+			Console.WriteLine("label: " + genReceiveAddress.label);
 			Console.WriteLine("");
 
 			Console.WriteLine("Current (New) Receive Address: ");
-			Console.WriteLine(cbc.GetCurrentReceiveAddress());
+			ReceiveAddress_Result receiveAddress = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
+			Console.WriteLine("success: " + receiveAddress.success);
+			Console.WriteLine("address: " + receiveAddress.address);
+			Console.WriteLine("callback_url: " + receiveAddress.callback_url);
 			Console.WriteLine("");
 			
 			Console.WriteLine("Address List: ");
-			Console.WriteLine(cbc.GetAddressList());
+			Addresses_Result addresses = JsonConvert.DeserializeObject<Addresses_Result>(cbc.GetAddressList());
+			foreach (Address address in addresses)
+			{
+				Console.WriteLine("address: " + address.address);
+				Console.WriteLine("callback_url: " + address.callback_url);
+				Console.WriteLine("label: " + address.label);
+				Console.WriteLine("created_at: " + address.created_at);
+				Console.WriteLine("");
+			}
+			Console.WriteLine("Total Count: " + addresses.total_count);
 			Console.WriteLine("");
 
 			Console.WriteLine("Create OAuth Application: ");
-			Console.WriteLine(cbc.CreateOAuthApplication("Sample App444", "http://www.example.com"));
+			CreateOAuthApp_Result OAuthApp = JsonConvert.DeserializeObject<CreateOAuthApp_Result>(cbc.CreateOAuthApplication("Sample App444", "http://www.example.com"));
+			Console.WriteLine("success: " + OAuthApp.success);
+			if (OAuthApp.success)
+			{
+				Console.WriteLine("id: " + OAuthApp.application.id);
+				Console.WriteLine("created_at: " + OAuthApp.application.created_at);
+				Console.WriteLine("name: " + OAuthApp.application.name);
+				Console.WriteLine("redirect_uri: " + OAuthApp.application.redirect_uri);
+				Console.WriteLine("client_id: " + OAuthApp.application.client_id);
+				Console.WriteLine("client_secret: " + OAuthApp.application.client_secret);
+				Console.WriteLine("num_users: " + OAuthApp.application.num_users);
+			}
+			else
+			{
+				foreach string error in OAuthApp.errors
+				{
+					Console.WriteLine("Error: " + error)
+				}
+			}
 			Console.WriteLine("");
 			
 			Console.WriteLine("OAuth Applications List: ");
