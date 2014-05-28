@@ -39,7 +39,7 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "account_changes?page=" + page, GET);
 		}
 
-		// Account
+		// Account - DEPRECATED
 		public string GetAccountBalance()
 		{
 			return JsonRequest(URL_BASE + "account/balance", GET);
@@ -55,6 +55,25 @@ namespace CoinbaseConnector
 		public string GenerateReceiveAddress(String callbackURL, String label)
 		{
 			return JsonRequest(URL_BASE + "account/generate_receive_address?address[callback_url]=" + callbackURL+"&address[label]=" + label, POST); 
+		}
+
+		// Accounts - NEW
+		public string GetUserAccounts(int page = 1, int limit = 25, Boolean all_accounts = false)
+		{
+			var sb = new StringBuilder();
+
+			sb.Append("?page=" + page);
+
+			if (limit > 1000) limit = 1000;
+			sb.Append("&limit=" + limit);
+
+			sb.Append("&all_accounts=" + all_accounts.ToString());
+
+			return JsonRequest(URL_BASE + "accounts" + sb.ToString(), GET);
+		}
+		public string GetUserAccountBalance(string id)
+		{
+			return JsonRequest(URL_BASE + "accounts/" + id + "/balance", GET);
 		}
 
 		// Addresses

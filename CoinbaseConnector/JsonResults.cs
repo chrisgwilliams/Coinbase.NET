@@ -74,6 +74,12 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
+	public class PurchaseBitcoin_Result
+	{
+		public string success { get; set; }
+		public Transfer transfer { get; set; }
+	}
+
 	public class ReceiveAddress_Result
 	{
 		public string success { get; set; }
@@ -89,7 +95,11 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
-
+	public class SellBitcoin_Result
+	{
+		public string success { get; set; }
+		public Transfer transfer { get; set; }
+	}
 
 	// SUPPORTING CLASSES
 
@@ -122,6 +132,7 @@ namespace CoinbaseConnector
 		public string id { get; set; }
 		public string created_at { get; set; }
 		public string name { get; set; }
+		public string redirect_uri { get; set; }
 		public string num_users { get; set; }
 	}
 
@@ -158,6 +169,12 @@ namespace CoinbaseConnector
 		public string id { get; set; }
 		public string email { get; set; }
 		public string name { get; set; }
+	}
+
+	public class Fees
+	{
+		public TotalMoney coinbase { get; set; }
+		public TotalMoney bank { get; set; }
 	}
 
 	public class OAuthApplication
@@ -241,6 +258,19 @@ namespace CoinbaseConnector
 		public Party recipient { get; set; }
 	}
 	
+	public class Transfer
+	{
+		public string type { get; set; }
+		public string code { get; set; }
+		public string created_at { get; set; }
+		public Fees fees { get; set; }
+		public string status { get; set; }
+		public string payout_date { get; set; }
+		public TotalMoney btc { get; set; }
+		public TotalMoney subtotal { get; set; }
+		public TotalMoney total { get; set; }
+	}
+
 	public class User
 	{
 		public string id { get; set; }

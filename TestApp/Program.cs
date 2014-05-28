@@ -46,23 +46,23 @@ namespace TestApp
 			Console.WriteLine("");
 			
 			Console.WriteLine("Generate Receive Address with Callback and Label: ");
-			GenerateReceiveAddress_Result genReceiveAddress = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress("http://www.example.com", "Sample Label"));
-			Console.WriteLine("success: " + genReceiveAddress.success);
-			Console.WriteLine("address: " + genReceiveAddress.address);
-			Console.WriteLine("callback_url: " + genReceiveAddress.callback_url);
-			Console.WriteLine("label: " + genReceiveAddress.label);
+			GenerateReceiveAddress_Result genReceiveAddress2 = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress("http://www.example.com", "Sample Label"));
+			Console.WriteLine("success: " + genReceiveAddress2.success);
+			Console.WriteLine("address: " + genReceiveAddress2.address);
+			Console.WriteLine("callback_url: " + genReceiveAddress2.callback_url);
+			Console.WriteLine("label: " + genReceiveAddress2.label);
 			Console.WriteLine("");
 
 			Console.WriteLine("Current (New) Receive Address: ");
-			ReceiveAddress_Result receiveAddress = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
-			Console.WriteLine("success: " + receiveAddress.success);
-			Console.WriteLine("address: " + receiveAddress.address);
-			Console.WriteLine("callback_url: " + receiveAddress.callback_url);
+			ReceiveAddress_Result receiveAddress2 = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
+			Console.WriteLine("success: " + receiveAddress2.success);
+			Console.WriteLine("address: " + receiveAddress2.address);
+			Console.WriteLine("callback_url: " + receiveAddress2.callback_url);
 			Console.WriteLine("");
 			
 			Console.WriteLine("Address List: ");
 			Addresses_Result addresses = JsonConvert.DeserializeObject<Addresses_Result>(cbc.GetAddressList());
-			foreach (Address address in addresses)
+			foreach (Address address in addresses.addresses)
 			{
 				Console.WriteLine("address: " + address.address);
 				Console.WriteLine("callback_url: " + address.callback_url);
@@ -76,7 +76,7 @@ namespace TestApp
 			Console.WriteLine("Create OAuth Application: ");
 			CreateOAuthApp_Result OAuthApp = JsonConvert.DeserializeObject<CreateOAuthApp_Result>(cbc.CreateOAuthApplication("Sample App444", "http://www.example.com"));
 			Console.WriteLine("success: " + OAuthApp.success);
-			if (OAuthApp.success)
+			if (Convert.ToBoolean(OAuthApp.success))
 			{
 				Console.WriteLine("id: " + OAuthApp.application.id);
 				Console.WriteLine("created_at: " + OAuthApp.application.created_at);
@@ -88,24 +88,27 @@ namespace TestApp
 			}
 			else
 			{
-				foreach string error in OAuthApp.errors
+				foreach (string error in OAuthApp.errors)
 				{
-					Console.WriteLine("Error: " + error)
+					Console.WriteLine("Error: " + error);
 				}
 			}
 			Console.WriteLine("");
 			
 			Console.WriteLine("OAuth Applications List: ");
-			Response = cbc.GetOAuthApplicationsList();
-			Console.WriteLine(Response);
-			Console.WriteLine("");
-
-			CreateOAuthApp_Result oAuthResult = JsonConvert.DeserializeObject<CreateOAuthApp_Result>(Response);
-			foreach (Application application in oAuthResult.applications)
+			OAuthApps_Result OAuthAppsList = JsonConvert.DeserializeObject<OAuthApps_Result>(cbc.GetOAuthApplicationsList());
+			foreach (Application application in OAuthAppsList.applications)
 			{
-				Console.WriteLine("OAuth Application Info By ID: " + application.id);
-				Console.WriteLine(cbc.GetOauthApplicationByID(application.id));
+				Console.WriteLine("ID: " + application.id);
+				Console.WriteLine("Created At: " + application.created_at);
+				Console.WriteLine("Name: " + application.name);
+				Console.WriteLine("Redirect_uri: " + application.redirect_uri);
+				Console.WriteLine("num_users: " + application.num_users);
+				Console.WriteLine("");
 			}
+			Console.WriteLine("Total Count: " + OAuthAppsList.total_count);
+			Console.WriteLine("Num Pages: " + OAuthAppsList.num_pages);
+			Console.WriteLine("Current Page: " + OAuthAppsList.current_page);
 			Console.WriteLine("");
 			
 			Console.WriteLine("Application Account Access Info: ");
