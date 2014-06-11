@@ -1,16 +1,9 @@
-﻿using System.Globalization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
-using System.Xml;
-using System.Configuration;
-using System.Runtime.Serialization.Json;
-using System.Web.Script.Serialization;
+
 
 namespace CoinbaseConnector
 {
