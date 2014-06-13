@@ -67,14 +67,22 @@ namespace CoinbaseConnector
 		{
 			return JsonRequest(URL_BASE + "accounts/" + id + "/balance", GET);
 		}
-
 		public string CreateAccount(string account_name) 
 		{
 			return JsonRequest(URL_BASE + "accounts?account[name]=" + account_name, POST);
 		}
-		public string UpdateAccountSettings() { }
-		public string SetAccountPrimary() { }
-		public string DeleteAccount() { }
+		public string UpdateAccountSettings(string id)
+		{
+			return JsonRequest(URL_BASE + "accounts/" + id, PUT);
+		}
+		public string SetAccountPrimary(string id)
+		{
+			return JsonRequest(URL_BASE + "accounts/" + id + "/primary", POST);
+		}
+		public string DeleteAccount(string id)
+		{
+			return JsonRequest(URL_BASE + "accounts/" + id, DELETE);
+		}
 
 		// Addresses
 		public string GetAddressList(int page = 1, int limit = 25, String query = "")
