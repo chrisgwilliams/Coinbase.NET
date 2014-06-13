@@ -1,16 +1,8 @@
-﻿using System.Globalization;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using System.Security.Cryptography;
 using System.IO;
-using System.Xml;
-using System.Configuration;
-using System.Runtime.Serialization.Json;
-using System.Web.Script.Serialization;
 
 namespace CoinbaseConnector
 {
@@ -75,6 +67,14 @@ namespace CoinbaseConnector
 		{
 			return JsonRequest(URL_BASE + "accounts/" + id + "/balance", GET);
 		}
+
+		public string CreateAccount(string account_name) 
+		{
+			return JsonRequest(URL_BASE + "accounts?account[name]=" + account_name, POST);
+		}
+		public string UpdateAccountSettings() { }
+		public string SetAccountPrimary() { }
+		public string DeleteAccount() { }
 
 		// Addresses
 		public string GetAddressList(int page = 1, int limit = 25, String query = "")

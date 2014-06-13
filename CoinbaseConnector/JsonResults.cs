@@ -6,9 +6,27 @@ using System.Threading.Tasks;
 
 namespace CoinbaseConnector
 {
-	
-	// JSON RESULT CLASSES
-	
+
+#region Account - DEPRECATED
+	public class GenerateReceiveAddress_Result
+	{
+		public string success { get; set; }
+		public string address { get; set; }
+		public string callback_url { get; set; }
+		public string label { get; set; }		
+	}
+
+	public class ReceiveAddress_Result
+	{
+		public string success { get; set; }
+		public string address { get; set; }
+		public string callback_url { get; set; }
+	}
+
+#endregion
+
+#region Account Changes
+
 	public class AccountChanges_Result
 	{
 		public CurrentUser current_user { get; set; }
@@ -20,11 +38,21 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
-	public class AccountSettings_Result
+
+
+#endregion
+
+#region Accounts
+	public class CreateAccount_Result
 	{
-		public User[] users { get; set; }
+		public string success { get; set; }
+		public Account account { get; set; }
 	}
 
+
+#endregion
+
+#region Addresses
 	public class Addresses_Result
 	{
 		public Address[] addresses { get; set; }
@@ -33,37 +61,15 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
-	public class CreateButton_Result
-	{
-		public string success { get; set; }
-		public Button button { get; set; }
-	}
 
-	public class CreateInvoice_Result
-	{
-		public string success { get; set; }
-		public Transaction transaction { get; set; }
-	}
+#endregion
 
+#region Oauth Applications
 	public class CreateOAuthApp_Result
 	{
 		public string success { get; set; }
 		public OAuthApplication application { get; set; }
 		public string[] errors { get; set; }
-	}
-
-	public class CreateOrder_Result
-	{
-		public string success { get; set; }
-		public Order order { get; set; }
-	}
-
-	public class GenerateReceiveAddress_Result
-	{
-		public string success { get; set; }
-		public string address { get; set; }
-		public string callback_url { get; set; }
-		public string label { get; set; }		
 	}
 
 	public class OAuthApps_Result
@@ -74,19 +80,52 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
+#endregion
+
+#region Authorization
+#endregion
+
+#region Buttons
+	public class CreateButton_Result
+	{
+		public string success { get; set; }
+		public Button button { get; set; }
+	}
+
+
+#endregion
+
+#region Buys
 	public class PurchaseBitcoin_Result
 	{
 		public string success { get; set; }
 		public Transfer transfer { get; set; }
 	}
 
-	public class ReceiveAddress_Result
+#endregion
+
+#region Contacts
+#endregion
+
+#region Currencies
+#endregion
+
+#region Orders
+	public class CreateOrder_Result
 	{
 		public string success { get; set; }
-		public string address { get; set; }
-		public string callback_url { get; set; }
+		public Order order { get; set; }
 	}
 
+#endregion
+
+#region Payment Methods
+#endregion
+
+#region Prices
+#endregion
+
+#region Recurring Payments
 	public class RecurringPayments_Result
 	{
 		public RecurringPayment[] recurring_payments { get; set; }
@@ -95,14 +134,60 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
+#endregion
+
+#region Reports
+#endregion
+
+#region Sells
 	public class SellBitcoin_Result
 	{
 		public string success { get; set; }
 		public Transfer transfer { get; set; }
 	}
 
-	// SUPPORTING CLASSES
+#endregion
 
+#region Subscribers
+#endregion
+
+#region Tokens
+#endregion
+
+#region Transactions
+	public class CreateInvoice_Result
+	{
+		public string success { get; set; }
+		public Transaction transaction { get; set; }
+	}
+
+#endregion
+
+#region Transfers
+#endregion
+
+#region Users
+	public class AccountSettings_Result
+	{
+		public User[] users { get; set; }
+	}
+
+#endregion
+
+
+#region SUPPORTING CLASSES
+
+	public class Account
+	{
+		public string id { get; set; }
+		public string name { get; set; }
+		public string active { get; set; }
+		public string created_at { get; set; }
+		public Amount balance { get; set; }
+		public Amount native_balance { get; set; }
+		public string primary { get; set; }
+	}
+	
 	public class AccountChanges
 	{
 		public string id { get; set; }
@@ -284,5 +369,5 @@ namespace CoinbaseConnector
 		public Amount buy_limit { get; set; }
 		public Amount sell_limit { get; set; }
 	}
-
+#endregion
 }

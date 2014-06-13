@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Data;
-
 using CoinbaseConnector;
 using Newtonsoft.Json;
 
@@ -60,6 +54,7 @@ namespace TestApp
 			Console.WriteLine("callback_url: " + receiveAddress2.callback_url);
 			Console.WriteLine("");
 			
+
 			Console.WriteLine("Address List: ");
 			Addresses_Result addresses = JsonConvert.DeserializeObject<Addresses_Result>(cbc.GetAddressList());
 			foreach (Address address in addresses.addresses)
