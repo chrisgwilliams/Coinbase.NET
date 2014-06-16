@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using System;
 
 namespace CoinbaseConnector
 {
@@ -26,7 +24,6 @@ namespace CoinbaseConnector
 #endregion
 
 #region Account Changes
-
 	public class AccountChanges_Result
 	{
 		public CurrentUser current_user { get; set; }
@@ -38,24 +35,47 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
-
-
 #endregion
 
 #region Accounts
+	public class Accounts_Result
+	{
+		public Account[] accounts { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
+	//use Amount class (in subclasses section, below) for returning account balance
+
 	public class CreateAccount_Result
 	{
 		public string success { get; set; }
 		public Account account { get; set; }
 	}
 
+	public class UpdateAccount_Result
+	{
+		public string success { get; set; }
+		public Account account { get; set; }
+	}
+	
+	public class AccountPrimary_Result
+	{
+		public string success { get; set; }
+	}
+	
+	public class DeleteAccount_Result
+	{
+		public string success { get; set; }
+	}
 
 #endregion
 
 #region Addresses
 	public class Addresses_Result
 	{
-		public Address[] addresses { get; set; }
+		public NestedAddress[] addresses { get; set; }
 		public string total_count { get; set; }
 		public string num_pages { get; set; }
 		public string current_page { get; set; }
@@ -72,6 +92,11 @@ namespace CoinbaseConnector
 		public string[] errors { get; set; }
 	}
 
+	public class GetOauthApp_Result
+	{
+		public OAuthApplication application { get; set; }
+	}
+
 	public class OAuthApps_Result
 	{
 		public Application[] applications { get; set; }
@@ -83,6 +108,11 @@ namespace CoinbaseConnector
 #endregion
 
 #region Authorization
+	public class AccountAccess_Result
+	{
+		public string auth_type { get; set; }
+		public object meta { get; set; }
+	}
 #endregion
 
 #region Buttons
@@ -92,7 +122,11 @@ namespace CoinbaseConnector
 		public Button button { get; set; }
 	}
 
-
+	public class CreateButtonOrder_Result
+	{
+		public string success { get; set; }
+		public Order order { get; set; }
+	}
 #endregion
 
 #region Buys
@@ -105,6 +139,14 @@ namespace CoinbaseConnector
 #endregion
 
 #region Contacts
+	public class Contacts_Result
+	{
+		public Contact[] contacts { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
 #endregion
 
 #region Currencies
@@ -197,7 +239,12 @@ namespace CoinbaseConnector
 		public Cache cache { get; set; }
 		public Amount amount { get; set; }
 	}
-	
+
+	public class NestedAddress
+	{
+		public Address address { get; set; }
+	}
+
 	public class Address
 	{
 		public string address { get; set; }
@@ -247,6 +294,11 @@ namespace CoinbaseConnector
 		public string notes_present { get; set; }
 		public string category { get; set; }
 		public OtherUser other_user { get; set; }
+	}
+
+	public class Contact
+	{
+		public string email { get; set; }
 	}
 
 	public class CurrentUser

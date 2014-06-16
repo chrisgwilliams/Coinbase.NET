@@ -56,13 +56,14 @@ namespace TestApp
 			
 
 			Console.WriteLine("Address List: ");
+			//String myaddresses = cbc.GetAddressList();
 			Addresses_Result addresses = JsonConvert.DeserializeObject<Addresses_Result>(cbc.GetAddressList());
-			foreach (Address address in addresses.addresses)
+			foreach (NestedAddress nestedAddress in addresses.addresses)
 			{
-				Console.WriteLine("address: " + address.address);
-				Console.WriteLine("callback_url: " + address.callback_url);
-				Console.WriteLine("label: " + address.label);
-				Console.WriteLine("created_at: " + address.created_at);
+				Console.WriteLine("address: " + nestedAddress.address.address);
+				Console.WriteLine("callback_url: " + nestedAddress.address.callback_url);
+				Console.WriteLine("label: " + nestedAddress.address.label);
+				Console.WriteLine("created_at: " + nestedAddress.address.created_at);
 				Console.WriteLine("");
 			}
 			Console.WriteLine("Total Count: " + addresses.total_count);
@@ -108,6 +109,9 @@ namespace TestApp
 			
 			Console.WriteLine("Application Account Access Info: ");
 			Console.WriteLine(cbc.GetApplicationAccountAccessInfo());
+			AccountAccess_Result accountAccessInfo = JsonConvert.DeserializeObject<AccountAccess_Result>(cbc.GetApplicationAccountAccessInfo());
+			Console.WriteLine("Auth Type: " + accountAccessInfo.auth_type);
+			Console.WriteLine("Meta: " + accountAccessInfo.meta);
 			Console.WriteLine("");
 
 			Console.WriteLine("Create Payment Button With Default Values: ");
@@ -119,15 +123,25 @@ namespace TestApp
 			var code = buttonResult.button.code;
 
 			Console.WriteLine("Create Order For Button: " + code);
-			Console.WriteLine(cbc.CreateOrderForButton(code));
+			CreateButtonOrder_Result buttonOrderResult = JsonConvert.DeserializeObject<CreateButtonOrder_Result>(cbc.CreateOrderForButton(code));
+			Console.WriteLine("Order ID: " + buttonOrderResult.order.id);
+			Console.WriteLine("Order Status: " + buttonOrderResult.order.status);
 			Console.WriteLine("");
 
-			Console.WriteLine("Purchase BitCoin: ");
+			Console.WriteLine("Purchase 0 BitCoin: ");
 			Console.WriteLine(cbc.PurchaseBitcoin(0));
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Email Contacts List: ");
-			Console.WriteLine(cbc.GetEmailContactsList());
+			//Console.WriteLine(cbc.GetEmailContactsList());
+			Contacts_Result contactsResult = JsonConvert.DeserializeObject<Contacts_Result>(cbc.GetEmailContactsList());
+			foreach (Contact contact in contactsResult.contacts)
+			{
+				Console.WriteLine("Email: " + contact.email);
+			}
+			Console.WriteLine("Total Count: " + contactsResult.total_count);
+			Console.WriteLine("Num Pages: " + contactsResult.num_pages);
+			Console.WriteLine("Current Page: " + contactsResult.current_page);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Supported Currencies List: ");
