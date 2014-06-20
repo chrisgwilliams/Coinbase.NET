@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CoinbaseConnector;
 using Newtonsoft.Json;
 
@@ -8,11 +9,11 @@ namespace TestApp
 	{
 		static void Main(string[] args)
 		{
-			var cbc = new CoinbaseConnector.Connector();
+			var cbc = new Connector();
 			var Response = "";
 
 			Console.WriteLine("Account Changes: ");
-			AccountChanges_Result changes = JsonConvert.DeserializeObject<AccountChanges_Result>(cbc.GetAccountChanges());
+			var changes = JsonConvert.DeserializeObject<AccountChanges_Result>(cbc.GetAccountChanges());
 			Console.WriteLine("Current User: ");
 			Console.WriteLine("id: " + changes.current_user.id);
 			Console.WriteLine("email: " + changes.current_user.email);
@@ -20,12 +21,12 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Account Balance: ");
-			Amount amount = JsonConvert.DeserializeObject<Amount>(cbc.GetAccountBalance());
+			var amount = JsonConvert.DeserializeObject<Amount>(cbc.GetAccountBalance());
 			Console.WriteLine(amount.amount + " " + amount.currency);
 			Console.WriteLine("");
 			
 			Console.WriteLine("Generate Receive Address: ");
-			GenerateReceiveAddress_Result genReceiveAddress = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress());
+			var genReceiveAddress = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress());
 			Console.WriteLine("success: " + genReceiveAddress.success);
 			Console.WriteLine("address: " + genReceiveAddress.address);
 			Console.WriteLine("callback_url: " + genReceiveAddress.callback_url);
@@ -33,14 +34,14 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Current Receive Address: ");
-			ReceiveAddress_Result receiveAddress = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
+			var receiveAddress = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
 			Console.WriteLine("success: " + receiveAddress.success);
 			Console.WriteLine("address: " + receiveAddress.address);
 			Console.WriteLine("callback_url: " + receiveAddress.callback_url);
 			Console.WriteLine("");
 			
 			Console.WriteLine("Generate Receive Address with Callback and Label: ");
-			GenerateReceiveAddress_Result genReceiveAddress2 = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress("http://www.example.com", "Sample Label"));
+			var genReceiveAddress2 = JsonConvert.DeserializeObject<GenerateReceiveAddress_Result>(cbc.GenerateReceiveAddress("http://www.example.com", "Sample Label"));
 			Console.WriteLine("success: " + genReceiveAddress2.success);
 			Console.WriteLine("address: " + genReceiveAddress2.address);
 			Console.WriteLine("callback_url: " + genReceiveAddress2.callback_url);
@@ -48,7 +49,7 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Current (New) Receive Address: ");
-			ReceiveAddress_Result receiveAddress2 = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
+			var receiveAddress2 = JsonConvert.DeserializeObject<ReceiveAddress_Result>(cbc.GetCurrentReceiveAddress());
 			Console.WriteLine("success: " + receiveAddress2.success);
 			Console.WriteLine("address: " + receiveAddress2.address);
 			Console.WriteLine("callback_url: " + receiveAddress2.callback_url);
@@ -56,9 +57,8 @@ namespace TestApp
 			
 
 			Console.WriteLine("Address List: ");
-			//String myaddresses = cbc.GetAddressList();
-			Addresses_Result addresses = JsonConvert.DeserializeObject<Addresses_Result>(cbc.GetAddressList());
-			foreach (NestedAddress nestedAddress in addresses.addresses)
+			var addresses = JsonConvert.DeserializeObject<Addresses_Result>(cbc.GetAddressList());
+			foreach (var nestedAddress in addresses.addresses)
 			{
 				Console.WriteLine("address: " + nestedAddress.address.address);
 				Console.WriteLine("callback_url: " + nestedAddress.address.callback_url);
@@ -70,7 +70,7 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Create OAuth Application: ");
-			CreateOAuthApp_Result OAuthApp = JsonConvert.DeserializeObject<CreateOAuthApp_Result>(cbc.CreateOAuthApplication("Sample App444", "http://www.example.com"));
+			var OAuthApp = JsonConvert.DeserializeObject<CreateOAuthApp_Result>(cbc.CreateOAuthApplication("Sample App444", "http://www.example.com"));
 			Console.WriteLine("success: " + OAuthApp.success);
 			if (Convert.ToBoolean(OAuthApp.success))
 			{
@@ -84,7 +84,7 @@ namespace TestApp
 			}
 			else
 			{
-				foreach (string error in OAuthApp.errors)
+				foreach (var error in OAuthApp.errors)
 				{
 					Console.WriteLine("Error: " + error);
 				}
@@ -92,8 +92,8 @@ namespace TestApp
 			Console.WriteLine("");
 			
 			Console.WriteLine("OAuth Applications List: ");
-			OAuthApps_Result OAuthAppsList = JsonConvert.DeserializeObject<OAuthApps_Result>(cbc.GetOAuthApplicationsList());
-			foreach (Application application in OAuthAppsList.applications)
+			var OAuthAppsList = JsonConvert.DeserializeObject<OAuthApps_Result>(cbc.GetOAuthApplicationsList());
+			foreach (var application in OAuthAppsList.applications)
 			{
 				Console.WriteLine("ID: " + application.id);
 				Console.WriteLine("Created At: " + application.created_at);
@@ -109,7 +109,7 @@ namespace TestApp
 			
 			Console.WriteLine("Application Account Access Info: ");
 			Console.WriteLine(cbc.GetApplicationAccountAccessInfo());
-			AccountAccess_Result accountAccessInfo = JsonConvert.DeserializeObject<AccountAccess_Result>(cbc.GetApplicationAccountAccessInfo());
+			var accountAccessInfo = JsonConvert.DeserializeObject<AccountAccess_Result>(cbc.GetApplicationAccountAccessInfo());
 			Console.WriteLine("Auth Type: " + accountAccessInfo.auth_type);
 			Console.WriteLine("Meta: " + accountAccessInfo.meta);
 			Console.WriteLine("");
@@ -119,11 +119,11 @@ namespace TestApp
 			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			CreateButton_Result buttonResult = JsonConvert.DeserializeObject<CreateButton_Result>(Response);
+			var buttonResult = JsonConvert.DeserializeObject<CreateButton_Result>(Response);
 			var code = buttonResult.button.code;
 
 			Console.WriteLine("Create Order For Button: " + code);
-			CreateButtonOrder_Result buttonOrderResult = JsonConvert.DeserializeObject<CreateButtonOrder_Result>(cbc.CreateOrderForButton(code));
+			var buttonOrderResult = JsonConvert.DeserializeObject<CreateButtonOrder_Result>(cbc.CreateOrderForButton(code));
 			Console.WriteLine("Order ID: " + buttonOrderResult.order.id);
 			Console.WriteLine("Order Status: " + buttonOrderResult.order.status);
 			Console.WriteLine("");
@@ -133,9 +133,8 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Email Contacts List: ");
-			//Console.WriteLine(cbc.GetEmailContactsList());
-			Contacts_Result contactsResult = JsonConvert.DeserializeObject<Contacts_Result>(cbc.GetEmailContactsList());
-			foreach (Contact contact in contactsResult.contacts)
+			var contactsResult = JsonConvert.DeserializeObject<Contacts_Result>(cbc.GetEmailContactsList());
+			foreach (var contact in contactsResult.contacts)
 			{
 				Console.WriteLine("Email: " + contact.email);
 			}
@@ -145,19 +144,32 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Supported Currencies List: ");
-			Console.WriteLine(cbc.GetSupportedCurrenciesList());
+			var currenciesResult = JsonConvert.DeserializeObject<string[][]>(cbc.GetSupportedCurrenciesList());
+			foreach (var currency in currenciesResult)
+			{
+				Console.Write("Name: " + currency[0]);
+				Console.WriteLine(" Code: " + currency[1]);
+			}
 			Console.WriteLine("");
 
 			Console.WriteLine("Get BitCoin Exchange Rate: ");
-			Console.WriteLine(cbc.GetBTCExchangeRate());
-			Console.WriteLine("");
-
-			Console.WriteLine("Generate CSV Report: ");
-			Console.WriteLine(cbc.GenerateCSVReport("transactions", "all"));
+			var exchangeratesResult = JsonConvert.DeserializeObject<Dictionary<String, String>>(cbc.GetBTCExchangeRate());
+			foreach (var rate in exchangeratesResult)
+			{
+				Console.Write("Conversion: " + rate.Key);
+				Console.WriteLine(" Rate: " + rate.Value);
+			}
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Received Merchant Orders List: ");
 			Console.WriteLine(cbc.GetReceivedMerchantOrdersList());
+			var merchantordersResult = JsonConvert.DeserializeObject<MerchantOrders_Result>(cbc.GetReceivedMerchantOrdersList());
+			foreach (var order in merchantordersResult.orders)
+			{
+				Console.WriteLine("Order ID: " + order.id);
+				Console.WriteLine("Status: " + order.status);
+			}
+			Console.WriteLine("Total: " + merchantordersResult.total_count);
 			Console.WriteLine("");
 
 			Console.WriteLine("Create New Order With Default Values: ");
@@ -165,7 +177,7 @@ namespace TestApp
 			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			CreateOrder_Result orderResult = JsonConvert.DeserializeObject<CreateOrder_Result>(Response);
+			var orderResult = JsonConvert.DeserializeObject<CreateOrder_Result>(Response);
 			var ID = orderResult.order.id;
 
 			Console.WriteLine("Get Merchant Order By ID: " + ID);
@@ -199,14 +211,18 @@ namespace TestApp
 			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			RecurringPayments_Result recurringPaymentsResult = JsonConvert.DeserializeObject<RecurringPayments_Result>(Response);
+			var recurringPaymentsResult = JsonConvert.DeserializeObject<RecurringPayments_Result>(Response);
 			foreach (RecurringPayment recurringPayment in recurringPaymentsResult.recurring_payments)
 			{
 				Console.WriteLine("Get Recurring Payment By ID: " + recurringPayment.id);
 				Console.WriteLine(cbc.GetRecurringPaymentsList(recurringPayment.id));
 			}
 			Console.WriteLine("");
-	
+
+			Console.WriteLine("Generate CSV Report: ");
+			Console.WriteLine(cbc.GenerateCSVReport("transactions", "all"));
+			Console.WriteLine("");
+
 			Console.WriteLine("Sell BitCoin: ");
 			Console.WriteLine(cbc.SellBitcoin(0));
 			Console.WriteLine("");
@@ -236,7 +252,7 @@ namespace TestApp
 			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			CreateInvoice_Result createInvoiceResult = JsonConvert.DeserializeObject<CreateInvoice_Result>(Response);
+			var createInvoiceResult = JsonConvert.DeserializeObject<CreateInvoice_Result>(Response);
 			var InvoiceID = createInvoiceResult.transaction.id;
 
 			Console.WriteLine("Resend Invoice: " + InvoiceID);
@@ -264,7 +280,7 @@ namespace TestApp
 			Console.WriteLine(Response);
 			Console.WriteLine("");
 
-			AccountSettings_Result accountSettingsResult = JsonConvert.DeserializeObject<AccountSettings_Result>(Response);
+			var accountSettingsResult = JsonConvert.DeserializeObject<AccountSettings_Result>(Response);
 			foreach (User user in accountSettingsResult.users)
 			{
 				Console.WriteLine("Update Account Settings for: " + user.id);

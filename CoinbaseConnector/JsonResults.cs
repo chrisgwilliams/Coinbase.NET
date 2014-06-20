@@ -1,6 +1,8 @@
 ﻿
 
 using System;
+using System.Collections.Generic;
+using System.Web.UI.WebControls.Expressions;
 
 namespace CoinbaseConnector
 {
@@ -150,12 +152,34 @@ namespace CoinbaseConnector
 #endregion
 
 #region Currencies
+	// Due to the way this API call is implemented & returned by Coinbase, you must use a jagged string array (like this: String[][]) 
+	// at the point of deserialization (i.e. in your app.)  This call does not support a response class. See Program.cs in the Test
+	// App for an example.
+	//SUPPORTED_CURRENCIES
+
+	// Due to the way this API call is implemented & returned by Coinbase, you must use a generic Dictionary<String, String> at the 
+	// point of deserialization (i.e. in your app.)  This call does not support a response class. See Program.cs in the Test App
+	// for an example.
+	//EXCHANGE_RATES
 #endregion
 
 #region Orders
+	public class MerchantOrders_Result
+	{
+		public Order[] orders { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
 	public class CreateOrder_Result
 	{
 		public string success { get; set; }
+		public Order order { get; set; }
+	}
+
+	public class MerchantOrder_Result
+	{
 		public Order order { get; set; }
 	}
 
@@ -308,6 +332,12 @@ namespace CoinbaseConnector
 		public string name { get; set; }
 	}
 
+	public class ExchangeRate
+	{
+		public string exchange { get; set; }
+		public string value { get; set; }
+	}
+
 	public class Fees
 	{
 		public TotalMoney coinbase { get; set; }
@@ -330,12 +360,13 @@ namespace CoinbaseConnector
 		public string id { get; set; }
 		public string created_at { get; set; }
 		public string status { get; set; }
+		public string _event { get; set; }
 		public TotalMoney total_btc { get; set; }
-		public TotalMoney totalNative { get; set; }
+		public TotalMoney total_native { get; set; }
 		public string custom { get; set; }
 		public string receive_address { get; set; }
 		public ButtonShortResponse button { get; set; }
-		public string transaction { get; set; }
+		public TransactionShortResponse transaction { get; set; }
 	}
 
 	public class OtherUser
@@ -394,7 +425,14 @@ namespace CoinbaseConnector
 		public Party sender { get; set; }
 		public Party recipient { get; set; }
 	}
-	
+
+	public class TransactionShortResponse
+	{
+		public string id { get; set; }
+		public string hash { get; set; }
+		public string confirmations { get; set; }
+	}
+
 	public class Transfer
 	{
 		public string type { get; set; }
