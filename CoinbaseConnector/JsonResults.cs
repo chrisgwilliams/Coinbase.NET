@@ -166,7 +166,7 @@ namespace CoinbaseConnector
 #region Orders
 	public class MerchantOrders_Result
 	{
-		public Order[] orders { get; set; }
+		public NestedOrder[] orders { get; set; }
 		public string total_count { get; set; }
 		public string num_pages { get; set; }
 		public string current_page { get; set; }
@@ -181,6 +181,11 @@ namespace CoinbaseConnector
 	public class MerchantOrder_Result
 	{
 		public Order order { get; set; }
+	}
+
+	public class RefundOrder_Result
+	{
+		public Refund order { get; set; }
 	}
 
 #endregion
@@ -264,11 +269,6 @@ namespace CoinbaseConnector
 		public Amount amount { get; set; }
 	}
 
-	public class NestedAddress
-	{
-		public Address address { get; set; }
-	}
-
 	public class Address
 	{
 		public string address { get; set; }
@@ -344,6 +344,16 @@ namespace CoinbaseConnector
 		public TotalMoney bank { get; set; }
 	}
 
+	public class NestedAddress
+	{
+		public Address address { get; set; }
+	}
+
+	public class NestedOrder
+	{
+		public Order order { get; set; }
+	}
+	
 	public class OAuthApplication
 	{
 		public string id { get; set; }
@@ -360,13 +370,14 @@ namespace CoinbaseConnector
 		public string id { get; set; }
 		public string created_at { get; set; }
 		public string status { get; set; }
-		public string _event { get; set; }
+		public string @event { get; set; }
 		public TotalMoney total_btc { get; set; }
 		public TotalMoney total_native { get; set; }
+		public TotalMoney total_payout { get; set; }
 		public string custom { get; set; }
 		public string receive_address { get; set; }
 		public ButtonShortResponse button { get; set; }
-		public TransactionShortResponse transaction { get; set; }
+		public string transaction { get; set; }
 	}
 
 	public class OtherUser
@@ -405,6 +416,23 @@ namespace CoinbaseConnector
 		public string notes { get; set; }
 		public string description { get; set; }
 		public Amount amount { get; set; }
+	}
+
+	public class Refund
+	{
+		public string id { get; set; }
+		public string created_at { get; set; }
+		public string status { get; set; }
+		public string @event { get; set; }
+		public TotalMoney total_btc { get; set; }
+		public TotalMoney total_native { get; set; }
+		public TotalMoney total_payout { get; set; }
+		public string custom { get; set; }
+		public string receive_address { get; set; }
+		public ButtonShortResponse button { get; set; }
+		public string refund_address { get; set; }
+		public TransactionShortResponse transaction { get; set; }
+		public TransactionShortResponse refund_transaction { get; set; }
 	}
 
 	public class TotalMoney

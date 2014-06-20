@@ -162,24 +162,23 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Received Merchant Orders List: ");
-			Console.WriteLine(cbc.GetReceivedMerchantOrdersList());
 			var merchantordersResult = JsonConvert.DeserializeObject<MerchantOrders_Result>(cbc.GetReceivedMerchantOrdersList());
 			foreach (var order in merchantordersResult.orders)
 			{
-				Console.WriteLine("Order ID: " + order.id);
-				Console.WriteLine("Status: " + order.status);
+				Console.WriteLine("Order ID: " + order.order.id);
+				Console.WriteLine("Status: " + order.order.status);
 			}
 			Console.WriteLine("Total: " + merchantordersResult.total_count);
 			Console.WriteLine("");
 
 			Console.WriteLine("Create New Order With Default Values: ");
-			Response = cbc.CreateNewOrder("Sample Item", "0.005", "BTC");
-			Console.WriteLine(Response);
+			var createorderResult = JsonConvert.DeserializeObject<CreateOrder_Result>(cbc.CreateNewOrder("Sample Item", "0.005", "BTC"));
+			var ID = createorderResult.order.id;
+			Console.WriteLine("Order ID: " + ID);
+			Console.WriteLine("Receive Address: " + createorderResult.order.receive_address);
+			Console.WriteLine("Success: " + createorderResult.success);
 			Console.WriteLine("");
-
-			var orderResult = JsonConvert.DeserializeObject<CreateOrder_Result>(Response);
-			var ID = orderResult.order.id;
-
+			
 			Console.WriteLine("Get Merchant Order By ID: " + ID);
 			Console.WriteLine(cbc.GetMerchantOrderByID(ID));
 			Console.WriteLine("");
