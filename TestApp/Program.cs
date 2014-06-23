@@ -180,11 +180,26 @@ namespace TestApp
 			Console.WriteLine("");
 			
 			Console.WriteLine("Get Merchant Order By ID: " + ID);
-			Console.WriteLine(cbc.GetMerchantOrderByID(ID));
+			var response = cbc.GetMerchantOrderByID(ID);
+			var merchantorderResult = JsonConvert.DeserializeObject<MerchantOrder_Result>(response);
+			// Coinbase returns an error message if the order is null. The format is completely different than the standard response.
+			if (merchantorderResult.order != null)
+			{
+				Console.WriteLine("ID: " + merchantorderResult.order.id);
+				Console.WriteLine("Status: " + merchantorderResult.order.status);
+				Console.WriteLine("Receive Address: " + merchantorderResult.order.receive_address);
+			}
+			else
+			{
+				var error = JsonConvert.DeserializeObject<Error>(response);
+				Console.WriteLine("Success: " + error.success);
+				Console.WriteLine("Error: " + error.error);
+			}
 			Console.WriteLine("");
 
-			// Currently, this method WILL FAIL if the calling user has no payment methods defined in their account.
-			// A bug has been submitted to Coinbase engineers to return json instead of throwing an error.
+			// Currently, this method WILL FAIL if the calling user has no payment methods defined in their account. A
+			// bug has been submitted to Coinbase engineers to return json instead of throwing an error. Until then, be
+			// sure to use a TRY/Catch clause to prevent your app from blowing up.
 			Console.WriteLine("Get Associated Payment Methods: ");
 			Console.WriteLine(cbc.GetAssociatedPaymentMethods());
 			Console.WriteLine("");

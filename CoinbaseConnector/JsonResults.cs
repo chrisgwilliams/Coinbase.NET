@@ -338,6 +338,12 @@ namespace CoinbaseConnector
 		public string value { get; set; }
 	}
 
+	public class Error
+	{
+		public string success { get; set; }
+		public string error { get; set; }
+	}
+
 	public class Fees
 	{
 		public TotalMoney coinbase { get; set; }
