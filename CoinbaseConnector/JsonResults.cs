@@ -191,6 +191,14 @@ namespace CoinbaseConnector
 #endregion
 
 #region Payment Methods
+
+    public class PaymentMethods_Result
+    {
+        public PaymentMethod[] payment_methods { get; set; }
+        public string default_buy { get; set; }
+        public string default_sell { get; set; }
+    }
+
 #endregion
 
 #region Prices
@@ -398,6 +406,14 @@ namespace CoinbaseConnector
 		public string name { get; set; }
 		public string email { get; set; }
 	}
+
+    public class PaymentMethod
+    {
+        public string id { get; set; }
+        public string name { get; set; }
+        public string can_buy { get; set; }
+        public string can_sell { get; set; }
+    }
 
 	public class Price
 	{
