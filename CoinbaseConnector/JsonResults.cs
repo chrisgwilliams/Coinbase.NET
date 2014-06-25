@@ -194,7 +194,7 @@ namespace CoinbaseConnector
 
     public class PaymentMethods_Result
     {
-        public PaymentMethod[] payment_methods { get; set; }
+        public NestedPaymentMethod[] payment_methods { get; set; }
         public string default_buy { get; set; }
         public string default_sell { get; set; }
     }
@@ -202,6 +202,32 @@ namespace CoinbaseConnector
 #endregion
 
 #region Prices
+
+	public class BuyPrice_Result
+	{
+		public Amount subtotal { get; set; }
+		public List<Fees> fees { get; set; }
+		public Amount total { get; set; }
+	}
+
+	public class SellPrice_Result
+	{
+		public Amount subtotal { get; set; }
+		public List<Fees> fees { get; set; }
+		public Amount total { get; set; }
+	}
+
+	public class SpotPrice_Result
+	{
+		public string amount { get; set; }
+		public string currency { get; set; }
+	}
+
+	public class HistoricalPrice_Result
+	{
+		// results are returned in CSV format and are not serialized.
+	}
+
 #endregion
 
 #region Recurring Payments
@@ -352,10 +378,16 @@ namespace CoinbaseConnector
 		public string error { get; set; }
 	}
 
+	public class Fee
+	{
+		public string amount { get; set; }
+		public string currency { get; set; }
+	}
+
 	public class Fees
 	{
-		public TotalMoney coinbase { get; set; }
-		public TotalMoney bank { get; set; }
+		public Fee coinbase { get; set; }
+		public Fee bank { get; set; }
 	}
 
 	public class NestedAddress
@@ -367,7 +399,12 @@ namespace CoinbaseConnector
 	{
 		public Order order { get; set; }
 	}
-	
+
+	public class NestedPaymentMethod
+	{
+		public PaymentMethod payment_method { get; set; }
+	}
+
 	public class OAuthApplication
 	{
 		public string id { get; set; }

@@ -201,21 +201,40 @@ namespace TestApp
 			// bug has been submitted to Coinbase engineers to return json instead of throwing an error. Until then, be
 			// sure to use a TRY/Catch clause to prevent your app from blowing up.
 			Console.WriteLine("Get Associated Payment Methods: ");
-			Console.WriteLine(cbc.GetAssociatedPaymentMethods());
+			var paymentmethodsResult = JsonConvert.DeserializeObject<PaymentMethods_Result>(cbc.GetAssociatedPaymentMethods());
+			foreach (var method in paymentmethodsResult.payment_methods)
+			{
+				Console.WriteLine("ID: " + method.payment_method.id);
+				Console.WriteLine("Name: " + method.payment_method.name);
+				Console.WriteLine("Buy? " + method.payment_method.can_buy);
+				Console.WriteLine("Sell? " + method.payment_method.can_sell);
+			}
+			Console.WriteLine("Default Buy: " + paymentmethodsResult.default_buy);
+			Console.WriteLine("Default Sell: " + paymentmethodsResult.default_sell);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Total Buy Price For BitCoin: ");
-			Console.WriteLine(cbc.GetTotalBuyPriceForBitcoin());
+			var buypriceResult = JsonConvert.DeserializeObject<BuyPrice_Result>(cbc.GetTotalBuyPriceForBitcoin());
+			Console.WriteLine("Subtotal: " + buypriceResult.subtotal.amount + " " + buypriceResult.subtotal.currency);
+			Console.WriteLine("Coinbase Fee: " + buypriceResult.fees[0].coinbase.amount + " " + buypriceResult.fees[0].coinbase.currency);
+			Console.WriteLine("Bank Fee: " + buypriceResult.fees[1].bank.amount + " " + buypriceResult.fees[1].bank.currency);
+			Console.WriteLine("Total: " + buypriceResult.total.amount + " " + buypriceResult.total.currency);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Total Sell Price For BitCoin: ");
-			Console.WriteLine(cbc.GetTotalSellPriceForBitcoin());
+			var sellpriceResult = JsonConvert.DeserializeObject<SellPrice_Result>(cbc.GetTotalSellPriceForBitcoin());
+			Console.WriteLine("Subtotal: " + sellpriceResult.subtotal.amount + " " + sellpriceResult.subtotal.currency);
+			Console.WriteLine("Coinbase Fee: " + sellpriceResult.fees[0].coinbase.amount + " " + sellpriceResult.fees[0].coinbase.currency);
+			Console.WriteLine("Bank Fee: " + sellpriceResult.fees[1].bank.amount + " " + sellpriceResult.fees[1].bank.currency);
+			Console.WriteLine("Total: " + sellpriceResult.total.amount + " " + sellpriceResult.total.currency);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Spot Price For BitCoin: ");
-			Console.WriteLine(cbc.GetSpotPriceForBitcoin());
+			var spotpriceResult = JsonConvert.DeserializeObject<SpotPrice_Result>(cbc.GetSpotPriceForBitcoin());
+			Console.WriteLine("Spot Price: " + spotpriceResult.amount + " " + spotpriceResult.currency);
 			Console.WriteLine("");
 
+			// This method returns a CSV feed and does not deserialize.
 			Console.WriteLine("Get Historical Spot Price For BitCoin: ");
 			Console.WriteLine(cbc.GetHistoricalSpotPriceForBitcoin());
 			Console.WriteLine("");
