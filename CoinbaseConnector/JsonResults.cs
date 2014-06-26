@@ -239,9 +239,27 @@ namespace CoinbaseConnector
 		public string current_page { get; set; }
 	}
 
+	public class RecurringPayment_Result
+	{
+		public RecurringPayment recurring_payment { get; set; }
+	}
+
 #endregion
 
 #region Reports
+	public class Reports_Result
+	{
+		public Report[] reports { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
+	public class GenerateReport_Result
+	{
+		
+	}
+
 #endregion
 
 #region Sells
@@ -492,6 +510,23 @@ namespace CoinbaseConnector
 		public string refund_address { get; set; }
 		public TransactionShortResponse transaction { get; set; }
 		public TransactionShortResponse refund_transaction { get; set; }
+	}
+
+	public class Report
+	{
+		public string id { get; set; }
+		public string type { get; set; }
+		public string status { get; set; }
+		public string email { get; set; }
+		public string repeat { get; set; }
+		public string time_range { get; set; }
+		public string callback_url { get; set; }
+		public string file_url { get; set; }
+		public string times { get; set; }
+		public string times_run { get; set; }
+		public string last_run { get; set; }
+		public string next_run { get; set; }
+		public string created_at { get; set; }
 	}
 
 	public class TotalMoney
