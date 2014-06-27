@@ -437,7 +437,7 @@ namespace CoinbaseConnector
 			// to the token, and will be credited to the account of the token redeemer if money is sent.
 			return JsonRequest(URL_BASE + "tokens", POST);
 		}
-		public string RedeemToken(String tokenID = "")
+		public string RedeemToken(String tokenID)
 		{
 			// This call claims a redeemable token for its address and bitcoin(s).
 			return JsonRequest(URL_BASE + "tokens/redeem?token_id=" + tokenID, POST);

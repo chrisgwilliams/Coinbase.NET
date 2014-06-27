@@ -283,29 +283,33 @@ namespace TestApp
 
 			Console.WriteLine("Get Subscribers List: ");
 			var subscriberlistResult = JsonConvert.DeserializeObject<SubscribersList_Result>(cbc.GetSubscribersList());
-			String ID = "";
+			String subscriberID = "";
 			foreach (RecurringPaymentAsMerchant recurringPayment in subscriberlistResult.recurring_payments)
 			{
 				ID = recurringPayment.id;
-				Console.WriteLine("ID: " + ID);
+				Console.WriteLine("ID: " + subscriberID);
 				Console.WriteLine("Name: " + recurringPayment.button.name);
 				Console.WriteLine("Desc: " + recurringPayment.button.description);
 				Console.WriteLine("");
 			}
 
-			Console.WriteLine("Get Subscribers By ID: " + ID);
-			var subscriber = JsonConvert.DeserializeObject<Subscriber_Result>(cbc.GetSubscribersList(ID));
+			Console.WriteLine("Get Subscribers By ID: " + subscriberID);
+			var subscriber = JsonConvert.DeserializeObject<Subscriber_Result>(cbc.GetSubscribersList(subscriberID));
 			Console.WriteLine("ID: " + subscriber.recurring_payment.id);
 			Console.WriteLine("Name: " + subscriber.recurring_payment.button.name);
 			Console.WriteLine("Desc: " + subscriber.recurring_payment.button.description);
 			Console.WriteLine("");
 
 			Console.WriteLine("Create Token: ");
-			Console.WriteLine(cbc.CreateToken());
+			var createtokenResult = JsonConvert.DeserializeObject<CreateToken_Result>(cbc.CreateToken());
+			var tokenID = createtokenResult.token.token_id;
+			Console.WriteLine("Token ID: " + tokenID);
+			Console.WriteLine("Success: " + createtokenResult.success);
 			Console.WriteLine("");
 
 			Console.WriteLine("Redeem Token: ");
-			Console.WriteLine(cbc.RedeemToken());
+			var redeemtokenResult = JsonConvert.DeserializeObject<RedeemToken_Result>(cbc.RedeemToken(tokenID));
+			Console.WriteLine("Success: " + redeemtokenResult.success);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Transactions List: ");

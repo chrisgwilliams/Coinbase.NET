@@ -293,6 +293,17 @@ namespace CoinbaseConnector
 #endregion
 
 #region Tokens
+	public class CreateToken_Result
+	{
+		public string success { get; set; }
+		public Token token { get; set; }
+	}
+
+	public class RedeemToken_Result
+	{
+		public string success { get; set; }
+	}
+
 #endregion
 
 #region Transactions
@@ -554,6 +565,12 @@ namespace CoinbaseConnector
 		public string last_run { get; set; }
 		public string next_run { get; set; }
 		public string created_at { get; set; }
+	}
+
+	public class Token
+	{
+		public string token_id { get; set; }
+		public string address { get; set; }
 	}
 
 	public class TotalMoney
