@@ -240,11 +240,7 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Recurring Payments List: ");
-			Response = cbc.GetRecurringPaymentsList();
-			Console.WriteLine(Response);
-			Console.WriteLine("");
-
-			var recurringPaymentsResult = JsonConvert.DeserializeObject<RecurringPayments_Result>(Response);
+			var recurringPaymentsResult = JsonConvert.DeserializeObject<RecurringPayments_Result>(cbc.GetRecurringPaymentsList());
 			foreach (RecurringPayment recurringPayment in recurringPaymentsResult.recurring_payments)
 			{
 				Console.WriteLine("Get Recurring Payment By ID: " + recurringPayment.id);
@@ -252,12 +248,38 @@ namespace TestApp
 			}
 			Console.WriteLine("");
 
+			Console.WriteLine("Get List Of CSV Reports: ");
+			var reportsListResult = JsonConvert.DeserializeObject<Reports_Result>(cbc.GetReportsList());
+			foreach (Report report in reportsListResult.reports)
+			{
+				Console.WriteLine("Report ID: " + report.id);
+				Console.WriteLine("Sent To: " + report.email);
+				Console.WriteLine("Report Type: " + report.type);
+			}
+			Console.WriteLine("");
+
 			Console.WriteLine("Generate CSV Report: ");
-			Console.WriteLine(cbc.GenerateCSVReport("transactions", "all"));
+			var reportResult = JsonConvert.DeserializeObject<GenerateReport_Result>(cbc.GenerateCSVReport("test@test.com", "transactions"));
+			var reportID = reportResult.report.id;
+			Console.WriteLine("ID: " + reportID);
+			Console.WriteLine("Sent To: " + reportResult.report.email);
+			Console.WriteLine("Report Type: " + reportResult.report.type);
+			Console.WriteLine("");
+
+			Console.WriteLine("Get CSV Report by ID: ");
+			Console.WriteLine(cbc.GetReportByID(reportID));
+			var reportdetailsResult = JsonConvert.DeserializeObject<ReportDetails_Result>(cbc.GetReportByID(reportID));
+			Console.WriteLine("Report ID: " + reportdetailsResult.report.id);
+			Console.WriteLine("Sent To: " + reportdetailsResult.report.email);
+			Console.WriteLine("Report Type: " + reportdetailsResult.report.type);
 			Console.WriteLine("");
 
 			Console.WriteLine("Sell BitCoin: ");
-			Console.WriteLine(cbc.SellBitcoin(0));
+			var sellbitcoinResult = JsonConvert.DeserializeObject<SellBitcoin_Result>(cbc.SellBitcoin(0));
+			Console.WriteLine("Success: " + sellbitcoinResult.success);
+			Console.WriteLine("Transfer Type: " + sellbitcoinResult.transfer.type);
+			Console.WriteLine("Transfer Code: " + sellbitcoinResult.transfer.code);
+			Console.WriteLine("Total Amount: " + sellbitcoinResult.transfer.total.cents + " " + sellbitcoinResult.transfer.total.currency_iso);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Subscribers List: ");

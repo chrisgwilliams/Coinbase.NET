@@ -257,9 +257,14 @@ namespace CoinbaseConnector
 
 	public class GenerateReport_Result
 	{
-		
+		public string success { get; set; }
+		public Report report { get; set; }
 	}
 
+	public class ReportDetails_Result
+	{
+		public Report report { get; set; }
+	}
 #endregion
 
 #region Sells
@@ -272,6 +277,7 @@ namespace CoinbaseConnector
 #endregion
 
 #region Subscribers
+
 #endregion
 
 #region Tokens

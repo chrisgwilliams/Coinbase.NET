@@ -233,28 +233,6 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "currencies/exchange_rates", GET);
 		}
 
-		// Exports
-		public string GenerateCSVReport(String type, String timeRange, String timeRangeStart="", String timeRangeEnd = "", String email = "")
-		{
-			// Valid values for type: transactions, orders, transfers
-			// Valid values for time_range: today, yesterday, past_7, past_30, month_to_date, last_full_month, year_to_date, 
-			// last_full_year, all, custom.  If custom, must supply time_range_start and time_range_end.
-			// If an email address is not provided, address on account will be used.
-			var sb = new StringBuilder();
-
-			// REQUIRED PARAMS
-			sb.Append("?type=" + type);
-			sb.Append("&time_range=" + timeRange);
-
-			// OPTIONAL PARAMS
-			if (email != "") sb.Append("&email=" + email);
-
-			// CONDITIONAL PARAMS
-			if (type == "custom") sb.Append("&time_range_start=" + timeRangeStart + "&time_range_end" + timeRangeEnd);
-
-			return JsonRequest(URL_BASE + "exports" + sb.ToString(), POST);
-		}
-
 		// Orders
 		public string GetReceivedMerchantOrdersList(int page = 1)
 		{
@@ -388,6 +366,48 @@ namespace CoinbaseConnector
 			// Commented out parameterized call due to API bug. Will recheck in next release (1.0.2).
 			//return JsonRequest(URL_BASE + "recurring_payments?page=" + page + "&limit=" + limit, GET);
 			return JsonRequest(URL_BASE + "recurring_payments", GET);
+		}
+
+		// Reports
+		public string GetReportsList()
+		{
+			return JsonRequest(URL_BASE + "reports", GET);
+		}
+		public string GenerateCSVReport(String email, String type, String timeRange = "", String timeRangeStart = "", String timeRangeEnd = "",  
+			String callbackURL = "", String startType = "now", String nextRunDate = "", String nextRunTime = "", String repeat = "", String times = "", 
+			String accountID = "")
+		{
+			// Valid values for type: transactions, orders, transfers
+			// Valid values for time_range: today, yesterday, past_7, past_30, month_to_date, last_full_month, year_to_date, 
+			// last_full_year, all, custom.  If custom, must supply time_range_start and time_range_end. Defaults to past_30
+			// Valid values for start_type: now, on
+			// Valid values for repeat: never, daily, weekly, every_two_weeks, monthly, quarterly, yearly. Defaults to never.
+			// If an email address is not provided, address on account will be used.
+			var sb = new StringBuilder();
+
+			// REQUIRED PARAMS
+			sb.Append("?report[type]=" + type);
+			sb.Append("&report[email]=" + email);			
+
+			// OPTIONAL PARAMS
+			if (timeRange != "") sb.Append("&report[time_range]=" + timeRange);
+			if (callbackURL != "") sb.Append("&report[callback_url]=" + callbackURL);
+			if (startType != "") sb.Append("&report[start_type]=" + startType);
+			if (repeat != "") sb.Append("&report[repeat]=" + repeat);
+			if (accountID != "") sb.Append("&report[account_id]=" + accountID);
+
+			// CONDITIONAL PARAMS
+			if (timeRange == "custom") sb.Append("&report[time_range_start]=" + timeRangeStart + "&report[time_range_end]=" + timeRangeEnd);
+			if (startType == "on") sb.Append("&report[next_run_date]=" + nextRunDate + "&report[next_run_time]=" + nextRunTime);
+			if (repeat != "never") 
+				if (repeat != "") 
+					if (times != "") sb.Append("&report[times]=" + times);
+
+			return JsonRequest(URL_BASE + "reports" + sb.ToString(), POST);
+		}
+		public string GetReportByID(string ID)
+		{
+			return JsonRequest(URL_BASE + "reports" + "/" + ID, POST);
 		}
 
 		// Sells
