@@ -313,7 +313,17 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Transactions List: ");
-			Console.WriteLine(cbc.GetTransactionsList());
+		    var gettransactionsResult = JsonConvert.DeserializeObject<GetTransactionList_Result>(cbc.GetTransactionsList());
+            Console.WriteLine("Name: " + gettransactionsResult.current_user.name);
+            Console.WriteLine("ID: " + gettransactionsResult.current_user.id);
+            Console.WriteLine("Balance: " + gettransactionsResult.balance.amount + ' ' + gettransactionsResult.balance.currency);
+		    foreach (Transaction transaction in gettransactionsResult.transactions)
+		    {
+		        Console.WriteLine("Transaction ID: " + transaction.id);
+                Console.WriteLine("Created: " + transaction.created_at);
+                Console.WriteLine("Sender: " + transaction.sender.name);
+                Console.WriteLine("Recipient: " + transaction.recipient.name);
+		    }
 			Console.WriteLine("");
 
 			Console.WriteLine("Send Money: ");

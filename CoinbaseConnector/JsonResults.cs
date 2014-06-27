@@ -307,6 +307,18 @@ namespace CoinbaseConnector
 #endregion
 
 #region Transactions
+
+    public class GetTransactionList_Result
+    {
+        public CurrentUser current_user { get; set; }
+        public Amount balance { get; set; }
+        public Amount native_balance { get; set; }
+        public string total_count { get; set; }
+        public string num_pages { get; set; }
+        public string current_page { get; set; }
+        public Transaction[] transactions { get; set; }
+    }
+
 	public class CreateInvoice_Result
 	{
 		public string success { get; set; }
@@ -590,6 +602,7 @@ namespace CoinbaseConnector
 		public string status { get; set; }
 		public Party sender { get; set; }
 		public Party recipient { get; set; }
+        public string recipient_address { get; set; }
 	}
 
 	public class TransactionShortResponse
