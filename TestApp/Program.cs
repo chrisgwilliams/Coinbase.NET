@@ -241,7 +241,7 @@ namespace TestApp
 
 			Console.WriteLine("Get Recurring Payments List: ");
 			var recurringPaymentsResult = JsonConvert.DeserializeObject<RecurringPayments_Result>(cbc.GetRecurringPaymentsList());
-			foreach (RecurringPayment recurringPayment in recurringPaymentsResult.recurring_payments)
+			foreach (RecurringPaymentAsCustomer recurringPayment in recurringPaymentsResult.recurring_payments)
 			{
 				Console.WriteLine("Get Recurring Payment By ID: " + recurringPayment.id);
 				Console.WriteLine(cbc.GetRecurringPaymentsList(recurringPayment.id));
@@ -267,7 +267,6 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get CSV Report by ID: ");
-			Console.WriteLine(cbc.GetReportByID(reportID));
 			var reportdetailsResult = JsonConvert.DeserializeObject<ReportDetails_Result>(cbc.GetReportByID(reportID));
 			Console.WriteLine("Report ID: " + reportdetailsResult.report.id);
 			Console.WriteLine("Sent To: " + reportdetailsResult.report.email);
@@ -283,7 +282,22 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Subscribers List: ");
-			Console.WriteLine(cbc.GetSubscribersList());
+			var subscriberlistResult = JsonConvert.DeserializeObject<SubscribersList_Result>(cbc.GetSubscribersList());
+			String ID = "";
+			foreach (RecurringPaymentAsMerchant recurringPayment in subscriberlistResult.recurring_payments)
+			{
+				ID = recurringPayment.id;
+				Console.WriteLine("ID: " + ID);
+				Console.WriteLine("Name: " + recurringPayment.button.name);
+				Console.WriteLine("Desc: " + recurringPayment.button.description);
+				Console.WriteLine("");
+			}
+
+			Console.WriteLine("Get Subscribers By ID: " + ID);
+			var subscriber = JsonConvert.DeserializeObject<Subscriber_Result>(cbc.GetSubscribersList(ID));
+			Console.WriteLine("ID: " + subscriber.recurring_payment.id);
+			Console.WriteLine("Name: " + subscriber.recurring_payment.button.name);
+			Console.WriteLine("Desc: " + subscriber.recurring_payment.button.description);
 			Console.WriteLine("");
 
 			Console.WriteLine("Create Token: ");

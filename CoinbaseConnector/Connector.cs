@@ -425,7 +425,7 @@ namespace CoinbaseConnector
 			// If you specify an ID, you get an individual customer subscription, otherwise you get a list
 			if (ID != "") return JsonRequest(URL_BASE + "subscribers/" + ID, GET);
 
-			// Commented out parameterized call due to API bug. Will recheck in next release (1.0.2).
+			// Commented out parameterized call due to API bug. Will recheck in next release (1.0.3).
 			//return JsonRequest(URL_BASE + "subscribers?page=" + page + "&limit=" + limit, GET);
 			return JsonRequest(URL_BASE + "subscribers", GET);
 		}

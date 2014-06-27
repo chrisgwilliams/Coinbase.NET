@@ -233,7 +233,7 @@ namespace CoinbaseConnector
 #region Recurring Payments
 	public class RecurringPayments_Result
 	{
-		public RecurringPayment[] recurring_payments { get; set; }
+		public RecurringPaymentAsCustomer[] recurring_payments { get; set; }
 		public string total_count { get; set; }
 		public string num_pages { get; set; }
 		public string current_page { get; set; }
@@ -241,7 +241,7 @@ namespace CoinbaseConnector
 
 	public class RecurringPayment_Result
 	{
-		public RecurringPayment recurring_payment { get; set; }
+		public RecurringPaymentAsCustomer recurring_payment { get; set; }
 	}
 
 #endregion
@@ -278,6 +278,18 @@ namespace CoinbaseConnector
 
 #region Subscribers
 
+	public class SubscribersList_Result
+	{
+		public RecurringPaymentAsMerchant[] recurring_payments { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
+	public class Subscriber_Result
+	{
+		public RecurringPaymentAsMerchant recurring_payment { get; set; }
+	}
 #endregion
 
 #region Tokens
@@ -482,7 +494,7 @@ namespace CoinbaseConnector
 		public string currency_iso { get; set; }
 	}
 
-	public class RecurringPayment
+	public class RecurringPaymentAsCustomer
 	{
 		public string id { get; set; }
 		public string type { get; set; }
@@ -499,6 +511,15 @@ namespace CoinbaseConnector
 		public string notes { get; set; }
 		public string description { get; set; }
 		public Amount amount { get; set; }
+	}
+
+	public class RecurringPaymentAsMerchant
+	{
+		public string id { get; set; }
+		public string created_at { get; set; }
+		public string status { get; set; }
+		public string custom { get; set; }
+		public ButtonShortResponse button { get; set; }
 	}
 
 	public class Refund
