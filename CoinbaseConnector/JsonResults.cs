@@ -249,7 +249,7 @@ namespace CoinbaseConnector
 #region Reports
 	public class Reports_Result
 	{
-		public Report[] reports { get; set; }
+		public NestedReport[] reports { get; set; }
 		public string total_count { get; set; }
 		public string num_pages { get; set; }
 		public string current_page { get; set; }
@@ -316,24 +316,76 @@ namespace CoinbaseConnector
         public string total_count { get; set; }
         public string num_pages { get; set; }
         public string current_page { get; set; }
-        public Transaction[] transactions { get; set; }
+        public NestedTransaction[] transactions { get; set; }
     }
+
+	public class TransactionDetails_Result
+	{
+		public Transaction transaction { get; set; }
+	}
+
+	public class SendMoney_Result
+	{
+		public string success { get; set; }
+		public Transaction transaction { get; set; }
+	}
 
 	public class CreateInvoice_Result
 	{
 		public string success { get; set; }
+		public string[] errors { get; set; }
+		public Transaction transaction { get; set; }
+	}
+
+	public class ResendInvoice_Result
+	{
+		public string success { get; set; }
+	}
+
+	public class CancelRequest_Result
+	{
+		public string success { get; set; }
+	}
+
+	public class CompleteRequest_Result
+	{
+		public string success { get; set; }
+		public string[] errors { get; set; }
 		public Transaction transaction { get; set; }
 	}
 
 #endregion
 
 #region Transfers
+	public class Transfers_Result
+	{
+		public NestedTransfer[] transfers { get; set; }
+		public string total_count { get; set; }
+		public string num_pages { get; set; }
+		public string current_page { get; set; }
+	}
+
 #endregion
 
 #region Users
+	public class CreateUser_Result
+	{
+		public string success { get; set; }
+		public string[] errors { get; set; }
+		public User user { get; set; }
+		public OAuth oauth { get; set; }
+	}
+
 	public class AccountSettings_Result
 	{
 		public User[] users { get; set; }
+	}
+
+	public class UpdateAccountSettings_Result
+	{
+		public string success { get; set; }
+		public string[] errors { get; set; }
+		public User user { get; set; }
 	}
 
 #endregion
@@ -462,6 +514,30 @@ namespace CoinbaseConnector
 	public class NestedPaymentMethod
 	{
 		public PaymentMethod payment_method { get; set; }
+	}
+
+	public class NestedReport
+	{
+		public Report report { get; set; }
+	}
+
+	public class NestedTransaction
+	{
+		public Transaction transaction { get; set; }
+	}
+
+	public class NestedTransfer
+	{
+		public Transfer transfer { get; set; }
+	}
+
+	public class OAuth
+	{
+		public string access_token { get; set; }
+		public string token_type { get; set; }
+		public string expires_in { get; set; }
+		public string refresh_token { get; set; }
+		public string scope { get; set; }
 	}
 
 	public class OAuthApplication
@@ -623,6 +699,8 @@ namespace CoinbaseConnector
 		public TotalMoney btc { get; set; }
 		public TotalMoney subtotal { get; set; }
 		public TotalMoney total { get; set; }
+		public string transaction_id { get; set; }
+		public string description { get; set; }
 	}
 
 	public class User
@@ -637,6 +715,8 @@ namespace CoinbaseConnector
 		public string sell_level { get; set; }
 		public Amount buy_limit { get; set; }
 		public Amount sell_limit { get; set; }
+		public string receive_address { get; set; }
+
 	}
 #endregion
 }

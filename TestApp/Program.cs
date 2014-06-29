@@ -250,11 +250,11 @@ namespace TestApp
 
 			Console.WriteLine("Get List Of CSV Reports: ");
 			var reportsListResult = JsonConvert.DeserializeObject<Reports_Result>(cbc.GetReportsList());
-			foreach (Report report in reportsListResult.reports)
+			foreach (NestedReport report in reportsListResult.reports)
 			{
-				Console.WriteLine("Report ID: " + report.id);
-				Console.WriteLine("Sent To: " + report.email);
-				Console.WriteLine("Report Type: " + report.type);
+				Console.WriteLine("Report ID: " + report.report.id);
+				Console.WriteLine("Sent To: " + report.report.email);
+				Console.WriteLine("Report Type: " + report.report.type);
 			}
 			Console.WriteLine("");
 
@@ -266,11 +266,11 @@ namespace TestApp
 			Console.WriteLine("Report Type: " + reportResult.report.type);
 			Console.WriteLine("");
 
-			Console.WriteLine("Get CSV Report by ID: ");
-			var reportdetailsResult = JsonConvert.DeserializeObject<ReportDetails_Result>(cbc.GetReportByID(reportID));
-			Console.WriteLine("Report ID: " + reportdetailsResult.report.id);
-			Console.WriteLine("Sent To: " + reportdetailsResult.report.email);
-			Console.WriteLine("Report Type: " + reportdetailsResult.report.type);
+			Console.WriteLine("Get CSV Report by ID: " + reportID);
+			//var reportdetailsResult = JsonConvert.DeserializeObject<ReportDetails_Result>(cbc.GetReportByID(reportID));
+			//Console.WriteLine("Report ID: " + reportdetailsResult.report.id);
+			//Console.WriteLine("Sent To: " + reportdetailsResult.report.email);
+			//Console.WriteLine("Report Type: " + reportdetailsResult.report.type);
 			Console.WriteLine("");
 
 			Console.WriteLine("Sell BitCoin: ");
@@ -286,7 +286,7 @@ namespace TestApp
 			String subscriberID = "";
 			foreach (RecurringPaymentAsMerchant recurringPayment in subscriberlistResult.recurring_payments)
 			{
-				ID = recurringPayment.id;
+				subscriberID = recurringPayment.id;
 				Console.WriteLine("ID: " + subscriberID);
 				Console.WriteLine("Name: " + recurringPayment.button.name);
 				Console.WriteLine("Desc: " + recurringPayment.button.description);
@@ -295,9 +295,13 @@ namespace TestApp
 
 			Console.WriteLine("Get Subscribers By ID: " + subscriberID);
 			var subscriber = JsonConvert.DeserializeObject<Subscriber_Result>(cbc.GetSubscribersList(subscriberID));
-			Console.WriteLine("ID: " + subscriber.recurring_payment.id);
-			Console.WriteLine("Name: " + subscriber.recurring_payment.button.name);
-			Console.WriteLine("Desc: " + subscriber.recurring_payment.button.description);
+			if (subscriber.recurring_payment != null)
+			{
+				Console.WriteLine("ID: " + subscriber.recurring_payment.id);
+				Console.WriteLine("Name: " + subscriber.recurring_payment.button.name);
+				Console.WriteLine("Desc: " + subscriber.recurring_payment.button.description);
+				Console.WriteLine("");
+			}
 			Console.WriteLine("");
 
 			Console.WriteLine("Create Token: ");
@@ -317,54 +321,74 @@ namespace TestApp
             Console.WriteLine("Name: " + gettransactionsResult.current_user.name);
             Console.WriteLine("ID: " + gettransactionsResult.current_user.id);
             Console.WriteLine("Balance: " + gettransactionsResult.balance.amount + ' ' + gettransactionsResult.balance.currency);
-		    foreach (Transaction transaction in gettransactionsResult.transactions)
-		    {
-		        Console.WriteLine("Transaction ID: " + transaction.id);
-                Console.WriteLine("Created: " + transaction.created_at);
-                Console.WriteLine("Sender: " + transaction.sender.name);
-                Console.WriteLine("Recipient: " + transaction.recipient.name);
+			string transactionID = "";
+			foreach (NestedTransaction transaction in gettransactionsResult.transactions)
+			{
+				transactionID = transaction.transaction.id;
+				Console.WriteLine("--Transaction ID: " + transactionID);
+                Console.WriteLine("--Created: " + transaction.transaction.created_at);
+                Console.WriteLine("--Sender: " + transaction.transaction.sender.name);
+                Console.WriteLine("--Recipient: " + transaction.transaction.recipient.name);
+				Console.WriteLine("");
 		    }
 			Console.WriteLine("");
 
+			Console.WriteLine("Show Transaction Details: ");
+			var transactiondetailsResult = JsonConvert.DeserializeObject<TransactionDetails_Result>(cbc.GetTransactionsList(transactionID));
+			Console.WriteLine("Recipient: " + transactiondetailsResult.transaction.recipient.name);
+			Console.WriteLine("Sender: " + transactiondetailsResult.transaction.sender.name);
+			Console.WriteLine("ID: " + transactiondetailsResult.transaction.id);
+			Console.WriteLine("");
+
 			Console.WriteLine("Send Money: ");
-			Console.WriteLine(cbc.SendMoney("test@MyStatisticallyImprobableEmailAddress.com", "0"));
+			var sendmoneyResult = JsonConvert.DeserializeObject<SendMoney_Result>(cbc.SendMoney("test@test.com", "0"));
+			Console.WriteLine("Success: " + sendmoneyResult.success);
+			Console.WriteLine("Sender: " + sendmoneyResult.transaction.sender.name);
+			Console.WriteLine("Recipient: " + sendmoneyResult.transaction.recipient.name);
 			Console.WriteLine("");
 
 			Console.WriteLine("Send Invoice: ");
-			Response = cbc.SendInvoice("test@MyStatisticallyImprobableEmailAddress.com");
-			Console.WriteLine(Response);
+			var createinvoiceResult = JsonConvert.DeserializeObject<CreateInvoice_Result>(cbc.SendInvoice("test@test.com","0.001"));
+			Console.WriteLine("Success: " + createinvoiceResult.success);
+			Console.WriteLine("Sender: " + createinvoiceResult.transaction.sender);
+			Console.WriteLine("Recipient: " + createinvoiceResult.transaction.recipient);
+			var InvoiceID = createinvoiceResult.transaction.id;
 			Console.WriteLine("");
-
-			var createInvoiceResult = JsonConvert.DeserializeObject<CreateInvoice_Result>(Response);
-			var InvoiceID = createInvoiceResult.transaction.id;
 
 			Console.WriteLine("Resend Invoice: " + InvoiceID);
-			Console.WriteLine(cbc.ResendInvoice(InvoiceID));
+			var resendResult = JsonConvert.DeserializeObject<ResendInvoice_Result>(cbc.ResendInvoice(InvoiceID));
+			Console.WriteLine("Success: " + resendResult.success);
 			Console.WriteLine("");
 
-			Console.WriteLine("Cancel Money Request: ");
-			Console.WriteLine(cbc.CancelMoneyRequest(InvoiceID));
+			Console.WriteLine("Cancel Money Request: " + InvoiceID);
+			var cancelrequestResult = JsonConvert.DeserializeObject<CancelRequest_Result>(cbc.CancelMoneyRequest(InvoiceID));
+			Console.WriteLine("Success: " + cancelrequestResult.success);
 			Console.WriteLine("");
 
 			Console.WriteLine("Complete Money Request: ");
-			Console.WriteLine(cbc.CompleteMoneyRequest(InvoiceID));
+			var completerequestResult = JsonConvert.DeserializeObject<CompleteRequest_Result>(cbc.CompleteMoneyRequest(InvoiceID));
+			Console.WriteLine("Success: " + completerequestResult.success);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Transfers List: ");
-			Console.WriteLine(cbc.GetTransfersList());
+			var transfersResult = JsonConvert.DeserializeObject<Transfers_Result>(cbc.GetTransfersList());
+			foreach (var transfers in transfersResult.transfers)
+			{
+				Console.WriteLine("Transaction ID: " + transfers.transfer.transaction_id);
+				Console.WriteLine("Type: " + transfers.transfer.type);
+				Console.WriteLine("Created At: " + transfers.transfer.created_at);
+			}
 			Console.WriteLine("");
 
 			Console.WriteLine("Create New User: ");
-			Console.WriteLine(cbc.CreateNewUser("newuseremail@email.com", "badpassword"));
+			var createuserResult = JsonConvert.DeserializeObject<CreateUser_Result>(cbc.CreateNewUser("newuseremail@email.com", "badpassword"));
+			Console.WriteLine("Success: " + createuserResult.success);
+			Console.WriteLine("Name: " + createuserResult.user.name);
 			Console.WriteLine("");
 
 			Console.WriteLine("Get Account Settings: ");
-			Response = cbc.GetAccountSettings();
-			Console.WriteLine(Response);
-			Console.WriteLine("");
-
-			var accountSettingsResult = JsonConvert.DeserializeObject<AccountSettings_Result>(Response);
-			foreach (User user in accountSettingsResult.users)
+			var accountsettingsResult = JsonConvert.DeserializeObject<AccountSettings_Result>(cbc.GetAccountSettings());
+			foreach (User user in accountsettingsResult.users)
 			{
 				Console.WriteLine("Update Account Settings for: " + user.id);
 				Console.WriteLine(cbc.UpdateAccountSettings(user.id, "My New Name"));

@@ -495,7 +495,7 @@ namespace CoinbaseConnector
 			return JsonRequest(URL_BASE + "transactions/send_money" + sb.ToString(), POST);
 		}
 		public string SendInvoice(String from, String amount = "", String amountString = "", String amountCurrencyISO = "",
-								  String notes = "")
+								  String notes = "", String accountID = "")
 		{
 			// This lets the user request money from a bitcoin address. If you pass an amount param it will be 
 			// interpreted as a bitcoin amount. Alternatively you can pass an amount_string and amount_currency_iso 
@@ -519,6 +519,7 @@ namespace CoinbaseConnector
 
 			// OPTIONAL PARAMS
 			if (notes != "") sb.Append("&transaction[notes]=" + notes);
+			if (accountID != "") sb.Append("&transaction[account_id]=" + accountID);
 
 			return JsonRequest(URL_BASE + "transactions/request_money" + sb.ToString(), POST);
 		}
