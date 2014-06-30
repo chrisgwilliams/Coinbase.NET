@@ -407,7 +407,7 @@ namespace CoinbaseConnector
 		}
 		public string GetReportByID(string ID)
 		{
-			return JsonRequest(URL_BASE + "reports" + "/" + ID, POST);
+			return JsonRequest(URL_BASE + "reports" + "/" + ID, GET);
 		}
 
 		// Sells

@@ -267,10 +267,10 @@ namespace TestApp
 			Console.WriteLine("");
 
 			Console.WriteLine("Get CSV Report by ID: " + reportID);
-			//var reportdetailsResult = JsonConvert.DeserializeObject<ReportDetails_Result>(cbc.GetReportByID(reportID));
-			//Console.WriteLine("Report ID: " + reportdetailsResult.report.id);
-			//Console.WriteLine("Sent To: " + reportdetailsResult.report.email);
-			//Console.WriteLine("Report Type: " + reportdetailsResult.report.type);
+			var reportdetailsResult = JsonConvert.DeserializeObject<ReportDetails_Result>(cbc.GetReportByID(reportID));
+			Console.WriteLine("Report ID: " + reportdetailsResult.report.id);
+			Console.WriteLine("Sent To: " + reportdetailsResult.report.email);
+			Console.WriteLine("Report Type: " + reportdetailsResult.report.type);
 			Console.WriteLine("");
 
 			Console.WriteLine("Sell BitCoin: ");
